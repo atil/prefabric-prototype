@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2015
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "prefabric.CSharp.Plugins", "prefabric.CSharp.Plugins.csproj", "{DD39A8B1-AF92-9F21-C398-169DAFCF8D7A}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "prefabric.CSharp", "prefabric.CSharp.csproj", "{ACF9719F-D8F7-53CB-5F92-B72ACB550E54}"
 EndProject
 Global
@@ -9,6 +11,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DD39A8B1-AF92-9F21-C398-169DAFCF8D7A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD39A8B1-AF92-9F21-C398-169DAFCF8D7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD39A8B1-AF92-9F21-C398-169DAFCF8D7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD39A8B1-AF92-9F21-C398-169DAFCF8D7A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{ACF9719F-D8F7-53CB-5F92-B72ACB550E54}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{ACF9719F-D8F7-53CB-5F92-B72ACB550E54}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ACF9719F-D8F7-53CB-5F92-B72ACB550E54}.Release|Any CPU.ActiveCfg = Release|Any CPU
