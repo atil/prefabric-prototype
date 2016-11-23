@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace PrefabricEditor
 {
@@ -11,5 +12,6 @@ namespace PrefabricEditor
         public Action<string> LevelSave;
         public Action<string> LevelLoad;
 
+        public Image Crosshair;
     }
 }

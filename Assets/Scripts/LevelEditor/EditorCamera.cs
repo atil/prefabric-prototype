@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Prefabric;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,25 +8,53 @@ namespace PrefabricEditor
 {
     public class EditorCamera : MonoBehaviour
     {
-        public Action<Vector3, Vector3> Hover;
-        public Action<Vector3, Vector3> Click;
+        public Action<Tile, Vector3> Hover;
+        public Action<Tile, Vector3> LeftClick;
+        public Action<Tile, Vector3> RightClick;
+
+        public Action<Tile, Vector3> HoverEnter;
+        public Action<Tile> HoverExit;
+        private Tile _currentHoverTile;
 
         private Transform _tr;
         private const float MoveSpeed = 5f;
         private const float RotSpeed = 50f;
+        private Vector3 _midScreen;
+        private bool _controlsEnabled;
 
         void Start()
         {
             _tr = transform;
+            _midScreen = new Vector3(Screen.width / 2, Screen.height / 2, 0);
+            _controlsEnabled = true;
+            SetCursor(false);
         }
 
-        public void SetEnabled(bool isEnabled)
+        private void SetCursor(bool isOn)
         {
-            enabled = isEnabled;
+            Cursor.lockState = isOn ? CursorLockMode.None : CursorLockMode.Locked;
+            Cursor.visible = isOn;
         }
 
         void Update()
         {
+            // Cursor enabling
+            if (Input.GetKeyDown(KeyCode.Tab))
+            {
+                SetCursor(true);
+                _controlsEnabled = false;
+            }
+            if (Input.GetKeyUp(KeyCode.Tab))
+            {
+                SetCursor(false);
+                _controlsEnabled = true;
+            }
+
+            if (!_controlsEnabled)
+            {
+                return;
+            }
+
             // Move
             var moveDir = Vector3.zero;
             if (Input.GetKey(KeyCode.W))
@@ -58,6 +87,48 @@ namespace PrefabricEditor
             // Look
             _tr.Rotate(Vector3.up * Input.GetAxis("Mouse X") * RotSpeed * Time.deltaTime, Space.World);
             _tr.Rotate(Vector3.left * Input.GetAxis("Mouse Y") * RotSpeed * Time.deltaTime, Space.Self);
+
+            // Hover
+            RaycastHit hit;
+            if (Physics.Raycast(Camera.main.ScreenPointToRay(_midScreen), out hit, float.MaxValue))
+            {
+                var tile = hit.transform.GetComponent<Tile>();
+                if (tile != null)
+                {
+                    if (tile != _currentHoverTile)
+                    {
+                        HoverEnter(tile, hit.normal);
+                        HoverExit(_currentHoverTile);
+                        _currentHoverTile = tile;
+                    }
+                }
+            }
+
+            // Left click
+            if (Input.GetMouseButtonDown(0))
+            {
+                if (Physics.Raycast(Camera.main.ScreenPointToRay(_midScreen), out hit, float.MaxValue))
+                {
+                    var tile = hit.transform.GetComponent<Tile>();
+                    if (tile != null)
+                    {
+                        LeftClick(tile, hit.normal);
+                    }
+                }
+            }
+
+            // Right click
+            if (Input.GetMouseButtonDown(1))
+            {
+                if (Physics.Raycast(Camera.main.ScreenPointToRay(_midScreen), out hit, float.MaxValue))
+                {
+                    var tile = hit.transform.GetComponent<Tile>();
+                    if (tile != null)
+                    {
+                        RightClick(tile, hit.normal);
+                    }
+                }
+            }
         }
 
     }
