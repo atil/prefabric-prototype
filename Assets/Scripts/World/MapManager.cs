@@ -26,8 +26,6 @@ namespace Prefabric
                 tile.Init();
             }
 
-            _levelLoader.SaveLevelAt(_tiles, Application.dataPath + "/Resources/Levels/testWriteLevel.json");
-
         }
 
         public void Update()

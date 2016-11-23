@@ -25,6 +25,11 @@ namespace Prefabric
             return ParseLevel(PfResources.LoadStringAt(_levelPaths[lvlNum]));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="lvlPath">A file path relative to Resources</param>
+        /// <returns></returns>
         public List<Tile> LoadLevelAt(string lvlPath)
         {
             return ParseLevel(PfResources.LoadStringAt(lvlPath));
