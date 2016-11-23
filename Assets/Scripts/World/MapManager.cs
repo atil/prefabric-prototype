@@ -7,20 +7,11 @@ namespace Prefabric
 {
     public class MapManager
     {
-        private class Tile
-        {
-            private GameObject _go;
-
-            public Tile(GameObject go)
-            {
-                _go = go;
-            }
-        }
-        
         private readonly ControllerBase _controller;
         private readonly List<AgentBase> _agents = new List<AgentBase>();
         private readonly PlayerAgent _player;
-        private List<Tile> _tiles;
+        private readonly List<Tile> _tiles;
+        private readonly LevelLoader _levelLoader = new LevelLoader();
 
         public MapManager(int lvlNum, ControllerBase controller, List<AgentBase> agents)
         {
@@ -28,24 +19,24 @@ namespace Prefabric
             _agents = agents;
             _player = _agents.Find(x => x is PlayerAgent) as PlayerAgent;
 
-            _tiles = LoadLevel(lvlNum);
-        }
+            _tiles = _levelLoader.LoadLevelAt(lvlNum);
 
-        private List<Tile> LoadLevel(int lvlNum)
-        {
-            var tiles = new List<Tile>();
-            var whiteTilePrefab = PfResources.Load<GameObject>(PfResourceType.WhiteTile);
-
-            var lvlJson = JSON.Parse(PfResources.LevelStringOf(lvlNum));
-            foreach (JSONClass tileEntry in lvlJson["tiles"].AsArray)
+            foreach (var tile in _tiles)
             {
-                var tilePos = new Vector3(tileEntry["x"].AsInt, tileEntry["y"].AsInt, tileEntry["z"].AsInt);
-                var tileGo = Object.Instantiate(whiteTilePrefab, tilePos, Quaternion.identity) as GameObject;
-
-                tiles.Add(new Tile(tileGo));
+                tile.Init();
             }
 
-            return tiles;
+            _levelLoader.SaveLevelAt(_tiles, Application.dataPath + "/Resources/Levels/testWriteLevel.json");
+
         }
+
+        public void Update()
+        {
+            foreach (var tile in _tiles)
+            {
+                tile.ExternalUpdate();
+            }
+        }
+        
     }
 }

@@ -7,32 +7,26 @@ namespace Prefabric
 {
     public enum PfResourceType
     {
+        LevelPathsFile,
         WhiteTile,
     }
 
 	public static class PfResources
 	{
-        private static List<string> _levelPaths = new List<string>();
         private static Dictionary<PfResourceType, string> _resourcePaths = new Dictionary<PfResourceType, string>();
 
 		static PfResources()
         {
-            var json = JSON.Parse(Resources.Load<TextAsset>("levelPaths").text);
-            foreach (JSONNode pathString in json["paths"].AsArray)
-            {
-                _levelPaths.Add(pathString.Value);
-            }
-
             _resourcePaths.Add(PfResourceType.WhiteTile, "Prefabs/Tiles/WhiteTile");
         }
 
-        public static string LevelStringOf(int index)
+        public static string LoadStringAt(string path)
         {
-            var textAsset = Resources.Load<TextAsset>(_levelPaths[index]);
+            var textAsset = Resources.Load<TextAsset>(path);
             if (textAsset == null)
             {
-                Debug.LogError("No level found for index : " + 0);
-                return string.Empty; 
+                Debug.LogError("No file found for path : " + path);
+                return string.Empty;
             }
             return textAsset.text;
         }
