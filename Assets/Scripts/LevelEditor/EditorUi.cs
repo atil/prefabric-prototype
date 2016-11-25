@@ -13,5 +13,15 @@ namespace PrefabricEditor
         public Action<string> LevelLoad;
 
         public Image Crosshair;
+        public Button MenuButton;
+        public EditorMenu EditorMenu;
+
+        void Start()
+        {
+            MenuButton.onClick.AddListener(() =>
+            {
+                EditorMenu.Toggle();
+            });
+        }
     }
 }

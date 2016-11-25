@@ -2,10 +2,21 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UniRx;
 using UnityEngine;
 
 namespace PrefabricEditor
 {
+    //public class TestEvent : IObservable<TestEvent>
+    //{
+    //    public bool val;
+
+    //    public IDisposable Subscribe(IObserver<TestEvent> observer)
+    //    {
+
+    //    }
+    //}
+
     public class EditorCamera : MonoBehaviour
     {
         public Action<Tile, Vector3> Hover;
@@ -39,15 +50,10 @@ namespace PrefabricEditor
         void Update()
         {
             // Cursor enabling
-            if (Input.GetKeyDown(KeyCode.Tab))
+            if (Input.GetKeyDown(KeyCode.Escape))
             {
-                SetCursor(true);
-                _controlsEnabled = false;
-            }
-            if (Input.GetKeyUp(KeyCode.Tab))
-            {
-                SetCursor(false);
-                _controlsEnabled = true;
+                SetCursor(_controlsEnabled);
+                _controlsEnabled = !_controlsEnabled;
             }
 
             if (!_controlsEnabled)

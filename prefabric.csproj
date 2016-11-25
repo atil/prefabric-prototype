@@ -86,6 +86,7 @@
     <Compile Include="Assets\Scripts\Controller\ControllerBase.cs" />
     <Compile Include="Assets\Scripts\Controller\KeyboardMouseController.cs" />
     <Compile Include="Assets\Scripts\LevelEditor\EditorCamera.cs" />
+    <Compile Include="Assets\Scripts\LevelEditor\EditorMenu.cs" />
     <Compile Include="Assets\Scripts\LevelEditor\EditorUi.cs" />
     <Compile Include="Assets\Scripts\LevelEditor\LevelEditorWorld.cs" />
     <Compile Include="Assets\Scripts\PfResources.cs" />
