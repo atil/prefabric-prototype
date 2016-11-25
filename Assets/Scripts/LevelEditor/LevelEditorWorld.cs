@@ -33,9 +33,21 @@ namespace Prefabric.LevelEditor
             _camera.LeftClick += OnCameraLeftClick;
             _camera.RightClick += OnCameraRightClick;
 
-            _ui.LevelSave += OnLevelSave;
-            _ui.LevelLoad += OnLevelLoad;
+            MessageBus.OnEvent<EditorSaveLevelEvent>().Subscribe(ev =>
+            {
+                _levelLoader.SaveLevelAt(_tiles, ev.Path);
+            });
 
+            MessageBus.OnEvent<EditorLoadLevelEvent>().Subscribe(ev =>
+            {
+                foreach(var tile in _tiles)
+                {
+                    DestroyImmediate(tile.gameObject);
+                }
+                _tiles.Clear();
+
+                _tiles = _levelLoader.LoadLevelAt(ev.Path);
+            });
         }
 
 
@@ -66,16 +78,5 @@ namespace Prefabric.LevelEditor
         }
         #endregion
 
-        #region UI Events
-        private void OnLevelSave(string lvlPath)
-        {
-
-        }
-
-        private void OnLevelLoad(string lvlPath)
-        {
-
-        }
-        #endregion
     }
 }

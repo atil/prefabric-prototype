@@ -10,8 +10,6 @@ namespace Prefabric.LevelEditor
     public class EditorUi : MonoBehaviour
     {
         public Action<bool> MenuToggle;
-        public Action<string> LevelSave;
-        public Action<string> LevelLoad;
 
         public Image Crosshair;
         public Button MenuButton;

@@ -32,11 +32,6 @@ namespace Prefabric.LevelEditor
             _tr = transform;
             _midScreen = new Vector3(Screen.width / 2, Screen.height / 2, 0);
             SetActive(true);
-
-            MessageBus.OnEvent<EditorMenuToggledEvent>().Subscribe(ev =>
-            {
-                SetActive(!ev.IsActive);
-            });
         }
 
         private void SetActive(bool value)
