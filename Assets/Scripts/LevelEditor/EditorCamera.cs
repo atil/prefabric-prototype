@@ -1,21 +1,15 @@
-﻿using Prefabric;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UniRx;
 using UnityEngine;
 
-namespace PrefabricEditor
+namespace Prefabric.LevelEditor
 {
-    //public class TestEvent : IObservable<TestEvent>
-    //{
-    //    public bool val;
-
-    //    public IDisposable Subscribe(IObserver<TestEvent> observer)
-    //    {
-
-    //    }
-    //}
+    public class EditorCameraStateChangedEvent : PfEvent
+    {
+        public bool IsActive { get; set; }
+    }
 
     public class EditorCamera : MonoBehaviour
     {
@@ -37,14 +31,25 @@ namespace PrefabricEditor
         {
             _tr = transform;
             _midScreen = new Vector3(Screen.width / 2, Screen.height / 2, 0);
-            _controlsEnabled = true;
-            SetCursor(false);
+            SetActive(true);
+
+            MessageBus.OnEvent<EditorMenuToggledEvent>().Subscribe(ev =>
+            {
+                SetActive(!ev.IsActive);
+            });
         }
 
-        private void SetCursor(bool isOn)
+        private void SetActive(bool value)
         {
-            Cursor.lockState = isOn ? CursorLockMode.None : CursorLockMode.Locked;
-            Cursor.visible = isOn;
+            Cursor.lockState = value ? CursorLockMode.Locked : CursorLockMode.None;
+            Cursor.visible = !value;
+            _controlsEnabled = value;
+
+            MessageBus.Publish(new EditorCameraStateChangedEvent()
+            {
+                IsActive = value
+            });
+
         }
 
         void Update()
@@ -52,8 +57,7 @@ namespace PrefabricEditor
             // Cursor enabling
             if (Input.GetKeyDown(KeyCode.Escape))
             {
-                SetCursor(_controlsEnabled);
-                _controlsEnabled = !_controlsEnabled;
+                SetActive(!_controlsEnabled);
             }
 
             if (!_controlsEnabled)

@@ -5,7 +5,7 @@ using Prefabric;
 using System;
 using UniRx;
 
-namespace PrefabricEditor
+namespace Prefabric.LevelEditor
 {
     public class LevelEditorWorld : MonoBehaviour
     {
@@ -33,7 +33,6 @@ namespace PrefabricEditor
             _camera.LeftClick += OnCameraLeftClick;
             _camera.RightClick += OnCameraRightClick;
 
-            _ui.MenuToggle += OnMenuToggled;
             _ui.LevelSave += OnLevelSave;
             _ui.LevelLoad += OnLevelLoad;
 
@@ -68,10 +67,6 @@ namespace PrefabricEditor
         #endregion
 
         #region UI Events
-        private void OnMenuToggled(bool isOn)
-        {
-        }
-
         private void OnLevelSave(string lvlPath)
         {
 

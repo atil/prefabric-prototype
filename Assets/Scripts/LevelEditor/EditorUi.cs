@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace PrefabricEditor
+namespace Prefabric.LevelEditor
 {
     public class EditorUi : MonoBehaviour
     {
@@ -21,6 +22,16 @@ namespace PrefabricEditor
             MenuButton.onClick.AddListener(() =>
             {
                 EditorMenu.Toggle();
+            });
+
+           MessageBus.OnEvent<EditorCameraStateChangedEvent>().Subscribe(ev =>
+            {
+                MenuButton.interactable = !ev.IsActive;
+
+                if (ev.IsActive)
+                {
+                    EditorMenu.SetState(false);
+                }
             });
         }
     }
