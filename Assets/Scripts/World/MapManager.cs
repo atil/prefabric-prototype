@@ -20,11 +20,13 @@ namespace Prefabric
             _player = _agents.Find(x => x is PlayerAgent) as PlayerAgent;
 
             _tiles = _levelLoader.LoadLevelAt(lvlNum);
-
             foreach (var tile in _tiles)
             {
                 tile.Init();
             }
+
+            var startTile = _tiles.Find(x => x is StartTile);
+            _player.Position = startTile.Position + Vector3.up * 1.5f;
 
         }
 

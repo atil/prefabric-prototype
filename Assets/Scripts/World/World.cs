@@ -7,17 +7,25 @@ namespace Prefabric
     public class World : MonoBehaviour
     {
         [SerializeField]
+        private Transform _camTransform;
+
+        [SerializeField]
         private Transform _playerTransform;
 
         private KeyboardMouseController _keyboardMouseController;
         private MapManager _mapManager;
         private PlayerAgent _player;
 
-	    void Start () 
+	    void Start() 
 	    {
-            _keyboardMouseController = new KeyboardMouseController();
+            _keyboardMouseController = new KeyboardMouseController(_camTransform);
             _player = new PlayerAgent(_playerTransform, _keyboardMouseController);
             _mapManager = new MapManager(0, _keyboardMouseController, new List<AgentBase> { _player });
 	    }
+
+        void Update()
+        {
+            _keyboardMouseController.Update();
+        }
     }
 }

@@ -10,6 +10,6 @@ namespace Prefabric
     {
         public Action<Vector3> Move;
 
-        protected virtual void Update() { }
+        public virtual void Update() { }
     }
 }

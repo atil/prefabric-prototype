@@ -48,6 +48,7 @@ namespace Prefabric
 
         /// <summary>
         /// Actual parsing of json file
+        /// Loaded level is guaranteed to have exactly one start and one end tile
         /// </summary>
         /// <param name="lvlStr">Json string</param>
         /// <returns></returns>
