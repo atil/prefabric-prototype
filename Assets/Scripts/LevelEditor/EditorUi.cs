@@ -16,7 +16,7 @@ namespace Prefabric.LevelEditor
         public EditorMenu EditorMenu;
         public EditorTileSelector EditorTileSelector;
 
-        void Start()
+        public void Init()
         {
             MenuButton.onClick.AddListener(() =>
             {
@@ -38,6 +38,18 @@ namespace Prefabric.LevelEditor
                 {
                     EditorMenu.SetState(false);
                 }
+            });
+
+            MessageBus.OnEvent<EditorSaveLevelEvent>().Subscribe(ev =>
+            {
+                MenuButton.interactable = false;
+                EditorMenu.SetState(false);
+            });
+
+            MessageBus.OnEvent<EditorLoadLevelEvent>().Subscribe(ev =>
+            {
+                MenuButton.interactable = false;
+                EditorMenu.SetState(false);
             });
         }
     }

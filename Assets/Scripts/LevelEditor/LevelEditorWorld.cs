@@ -22,6 +22,7 @@ namespace Prefabric.LevelEditor
         void Start()
         {
             _camera.Init();
+            _ui.Init();
 
             _levelLoader = new LevelLoader();
             _tiles = _levelLoader.LoadLevelAt("Levels/testLevel");
@@ -57,6 +58,10 @@ namespace Prefabric.LevelEditor
             });
         }
 
+        void Update()
+        {
+            _camera.ExternalUpdate();
+        }
 
         #region Camera Events
         private void OnCameraHoverExit(Tile tile)

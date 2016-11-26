@@ -14,27 +14,37 @@ namespace Prefabric.LevelEditor
 
     public class EditorCamera : MonoBehaviour
     {
+        // TODO ATIL: Convert these to PfEvents
         public Action<Tile, Vector3> Hover;
         public Action<Tile, Vector3> LeftClick;
+        public Action<Tile, Vector3> RightClick;
+        public Action<Tile, Vector3> HoverEnter;
+        public Action<Tile> HoverExit;
+
+        private const float MoveSpeed = 10f;
+        private const float RotSpeed = 50f;
+
+        private Tile _currentHoverTile;
+        private Transform _tr;
+        private Vector3 _midScreenPoint;
+        private bool _controlsEnabled;
 
         public void Init()
         {
             _tr = transform;
-            _midScreen = new Vector3(Screen.width / 2, Screen.height / 2, 0);
+            _midScreenPoint = new Vector3(Screen.width / 2, Screen.height / 2, 0);
             SetActive(true);
+
+            MessageBus.OnEvent<EditorSaveLevelEvent>().Subscribe(x =>
+            {
+                SetActive(true);
+            });
+
+            MessageBus.OnEvent<EditorLoadLevelEvent>().Subscribe(x =>
+            {
+                SetActive(true);
+            });
         }
-
-        public Action<Tile, Vector3> RightClick;
-
-        public Action<Tile, Vector3> HoverEnter;
-        public Action<Tile> HoverExit;
-        private Tile _currentHoverTile;
-
-        private Transform _tr;
-        private const float MoveSpeed = 5f;
-        private const float RotSpeed = 50f;
-        private Vector3 _midScreen;
-        private bool _controlsEnabled;
 
         private void SetActive(bool value)
         {
@@ -48,7 +58,7 @@ namespace Prefabric.LevelEditor
             });
         }
 
-        void Update()
+        public void ExternalUpdate()
         {
             // Cursor enabling
             if (Input.GetKeyDown(KeyCode.Escape))
@@ -96,7 +106,7 @@ namespace Prefabric.LevelEditor
 
             // Hover
             RaycastHit hit;
-            if (Physics.Raycast(Camera.main.ScreenPointToRay(_midScreen), out hit, float.MaxValue))
+            if (Physics.Raycast(Camera.main.ScreenPointToRay(_midScreenPoint), out hit, float.MaxValue))
             {
                 var tile = hit.transform.GetComponent<Tile>();
                 if (tile != null)
@@ -113,7 +123,7 @@ namespace Prefabric.LevelEditor
             // Left click
             if (Input.GetMouseButtonDown(0))
             {
-                if (Physics.Raycast(Camera.main.ScreenPointToRay(_midScreen), out hit, float.MaxValue))
+                if (Physics.Raycast(Camera.main.ScreenPointToRay(_midScreenPoint), out hit, float.MaxValue))
                 {
                     var tile = hit.transform.GetComponent<Tile>();
                     if (tile != null)
@@ -126,7 +136,7 @@ namespace Prefabric.LevelEditor
             // Right click
             if (Input.GetMouseButtonDown(1))
             {
-                if (Physics.Raycast(Camera.main.ScreenPointToRay(_midScreen), out hit, float.MaxValue))
+                if (Physics.Raycast(Camera.main.ScreenPointToRay(_midScreenPoint), out hit, float.MaxValue))
                 {
                     var tile = hit.transform.GetComponent<Tile>();
                     if (tile != null)

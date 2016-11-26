@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,16 +17,27 @@ namespace Prefabric.LevelEditor
     {
         public Text Text;
 
+        private Button _button;
+
         public void Init(PfResourceType tileResourceType)
         {
+            _button = GetComponent<Button>();
+
             Text.text = tileResourceType.ToString();
-            GetComponent<Button>().onClick.AddListener(() =>
+            _button.onClick.AddListener(() =>
             {
                 MessageBus.Publish(new EditorTileSelectedEvent()
                 {
                     SelectedTileResource = tileResourceType
                 });
             });
+
+            MessageBus.OnEvent<EditorCameraStateChangedEvent>().Subscribe(ev =>
+            {
+                _button.interactable = !ev.IsActive;
+            });
+
+            _button.interactable = false;
         }
     }
 }

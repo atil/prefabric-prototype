@@ -86,13 +86,17 @@
     <Compile Include="Assets\Scripts\Controller\KeyboardMouseController.cs" />
     <Compile Include="Assets\Scripts\LevelEditor\EditorCamera.cs" />
     <Compile Include="Assets\Scripts\LevelEditor\EditorMenu.cs" />
+    <Compile Include="Assets\Scripts\LevelEditor\EditorTileButton.cs" />
+    <Compile Include="Assets\Scripts\LevelEditor\EditorTileSelector.cs" />
     <Compile Include="Assets\Scripts\LevelEditor\EditorUi.cs" />
     <Compile Include="Assets\Scripts\LevelEditor\LevelEditorWorld.cs" />
     <Compile Include="Assets\Scripts\MessageBus\MessageBus.cs" />
     <Compile Include="Assets\Scripts\PfResources.cs" />
     <Compile Include="Assets\Scripts\World\LevelLoader.cs" />
     <Compile Include="Assets\Scripts\World\MapManager.cs" />
-    <Compile Include="Assets\Scripts\World\Tile.cs" />
+    <Compile Include="Assets\Scripts\World\Tiles\EndTile.cs" />
+    <Compile Include="Assets\Scripts\World\Tiles\StartTile.cs" />
+    <Compile Include="Assets\Scripts\World\Tiles\Tile.cs" />
     <Compile Include="Assets\Scripts\World\World.cs" />
   </ItemGroup>
   <ItemGroup>
