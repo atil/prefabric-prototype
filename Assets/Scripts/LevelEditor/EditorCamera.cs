@@ -1,20 +1,35 @@
-﻿using System;
+﻿using Prefabric;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UniRx;
 using UnityEngine;
 
-namespace Prefabric.LevelEditor
+namespace PrefabricEditor
 {
-    public class EditorCameraStateChangedEvent : PfEvent
-    {
-        public bool IsActive { get; set; }
-    }
+    //public class TestEvent : IObservable<TestEvent>
+    //{
+    //    public bool val;
+
+    //    public IDisposable Subscribe(IObserver<TestEvent> observer)
+    //    {
+
+    //    }
+    //}
 
     public class EditorCamera : MonoBehaviour
     {
         public Action<Tile, Vector3> Hover;
         public Action<Tile, Vector3> LeftClick;
+
+        public void Init()
+        {
+            _tr = transform;
+            _midScreen = new Vector3(Screen.width / 2, Screen.height / 2, 0);
+            _controlsEnabled = true;
+            SetCursor(false);
+        }
+
         public Action<Tile, Vector3> RightClick;
 
         public Action<Tile, Vector3> HoverEnter;
@@ -27,24 +42,10 @@ namespace Prefabric.LevelEditor
         private Vector3 _midScreen;
         private bool _controlsEnabled;
 
-        void Start()
+        private void SetCursor(bool isOn)
         {
-            _tr = transform;
-            _midScreen = new Vector3(Screen.width / 2, Screen.height / 2, 0);
-            SetActive(true);
-        }
-
-        private void SetActive(bool value)
-        {
-            Cursor.lockState = value ? CursorLockMode.Locked : CursorLockMode.None;
-            Cursor.visible = !value;
-            _controlsEnabled = value;
-
-            MessageBus.Publish(new EditorCameraStateChangedEvent()
-            {
-                IsActive = value
-            });
-
+            Cursor.lockState = isOn ? CursorLockMode.None : CursorLockMode.Locked;
+            Cursor.visible = isOn;
         }
 
         void Update()
@@ -52,7 +53,8 @@ namespace Prefabric.LevelEditor
             // Cursor enabling
             if (Input.GetKeyDown(KeyCode.Escape))
             {
-                SetActive(!_controlsEnabled);
+                SetCursor(_controlsEnabled);
+                _controlsEnabled = !_controlsEnabled;
             }
 
             if (!_controlsEnabled)

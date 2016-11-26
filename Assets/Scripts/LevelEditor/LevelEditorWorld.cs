@@ -21,6 +21,8 @@ namespace Prefabric.LevelEditor
 
         void Start()
         {
+            _camera.Init();
+
             _levelLoader = new LevelLoader();
             _tiles = _levelLoader.LoadLevelAt("Levels/testLevel");
             foreach (var tile in _tiles)
