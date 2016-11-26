@@ -94,6 +94,11 @@ namespace Prefabric
         /// <returns></returns>
         public bool SaveLevelAt(List<Tile> tiles, string lvlPath)
         {
+            if (string.IsNullOrEmpty(lvlPath))
+            {
+                return false;
+            }
+
             var startTiles = tiles.FindAll(t => t is StartTile);
             var endTiles = tiles.FindAll(t => t is EndTile);
             if (startTiles.Count != 1 || endTiles.Count != 1)

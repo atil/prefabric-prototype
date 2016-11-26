@@ -22,5 +22,7 @@ namespace Prefabric
         }
 
         protected virtual void OnMove(Vector3 dir) { }
+
+        public virtual void Update() { }
     }
 }

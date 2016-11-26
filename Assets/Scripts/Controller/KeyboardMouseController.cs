@@ -37,10 +37,7 @@ namespace Prefabric
                 dir += _camTransform.right.Horizontal();
             }
 
-            if (dir.sqrMagnitude > 0.001)
-            {
-                Move(dir);
-            }
+            Move(dir);
         }
     }
 }

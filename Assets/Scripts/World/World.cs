@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 namespace Prefabric
 {
@@ -12,6 +13,7 @@ namespace Prefabric
         [SerializeField]
         private Transform _playerTransform;
 
+        private List<AgentBase> _agents;
         private KeyboardMouseController _keyboardMouseController;
         private MapManager _mapManager;
         private PlayerAgent _player;
@@ -20,12 +22,25 @@ namespace Prefabric
 	    {
             _keyboardMouseController = new KeyboardMouseController(_camTransform);
             _player = new PlayerAgent(_playerTransform, _keyboardMouseController);
-            _mapManager = new MapManager(0, _keyboardMouseController, new List<AgentBase> { _player });
+            _agents = new List<AgentBase> { _player };
+            _mapManager = new MapManager(0, _keyboardMouseController, _agents);
 	    }
 
         void Update()
         {
+            // Emit commands
             _keyboardMouseController.Update();
+
+            // Let agents do whatever they want with those commands
+            foreach (var agent in _agents)
+            {
+                agent.Update();
+            }
+
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                SceneManager.LoadScene("GameScene");
+            }
         }
     }
 }

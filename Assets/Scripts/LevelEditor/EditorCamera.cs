@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UniRx;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Prefabric.LevelEditor
 {
@@ -121,27 +122,31 @@ namespace Prefabric.LevelEditor
             }
 
             // Left click
-            if (Input.GetMouseButtonDown(0))
+
+            if (!EventSystem.current.IsPointerOverGameObject())
             {
-                if (Physics.Raycast(Camera.main.ScreenPointToRay(_midScreenPoint), out hit, float.MaxValue))
+                if (Input.GetMouseButtonDown(0))
                 {
-                    var tile = hit.transform.GetComponent<Tile>();
-                    if (tile != null)
+                    if (Physics.Raycast(Camera.main.ScreenPointToRay(_midScreenPoint), out hit, float.MaxValue))
                     {
-                        LeftClick(tile, hit.normal);
+                        var tile = hit.transform.GetComponent<Tile>();
+                        if (tile != null)
+                        {
+                            LeftClick(tile, hit.normal);
+                        }
                     }
                 }
-            }
 
-            // Right click
-            if (Input.GetMouseButtonDown(1))
-            {
-                if (Physics.Raycast(Camera.main.ScreenPointToRay(_midScreenPoint), out hit, float.MaxValue))
+                // Right click
+                if (Input.GetMouseButtonDown(1))
                 {
-                    var tile = hit.transform.GetComponent<Tile>();
-                    if (tile != null)
+                    if (Physics.Raycast(Camera.main.ScreenPointToRay(_midScreenPoint), out hit, float.MaxValue))
                     {
-                        RightClick(tile, hit.normal);
+                        var tile = hit.transform.GetComponent<Tile>();
+                        if (tile != null)
+                        {
+                            RightClick(tile, hit.normal);
+                        }
                     }
                 }
             }

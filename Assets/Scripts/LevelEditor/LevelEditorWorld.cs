@@ -49,7 +49,10 @@ namespace Prefabric.LevelEditor
                 }
                 _tiles.Clear();
 
-                _tiles = _levelLoader.LoadLevelAt(ev.Path);
+                if (!string.IsNullOrEmpty(ev.Path))
+                {
+                    _tiles = _levelLoader.LoadLevelAt(ev.Path);
+                }
             });
 
             MessageBus.OnEvent<EditorTileSelectedEvent>().Subscribe(ev =>
