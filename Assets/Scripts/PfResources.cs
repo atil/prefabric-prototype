@@ -9,6 +9,9 @@ namespace Prefabric
     {
         LevelPathsFile,
         WhiteTile,
+        StartTile,
+        EndTile,
+        EditorTileButton,
     }
 
 	public static class PfResources
@@ -18,6 +21,9 @@ namespace Prefabric
 		static PfResources()
         {
             _resourcePaths.Add(PfResourceType.WhiteTile, "Prefabs/Tiles/WhiteTile");
+            _resourcePaths.Add(PfResourceType.StartTile, "Prefabs/Tiles/StartTile");
+            _resourcePaths.Add(PfResourceType.EndTile, "Prefabs/Tiles/EndTile");
+            _resourcePaths.Add(PfResourceType.EditorTileButton, "LevelEditor/Prefabs/TileButton");
         }
 
         public static string LoadStringAt(string path)

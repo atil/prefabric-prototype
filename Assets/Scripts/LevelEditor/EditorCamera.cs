@@ -12,7 +12,6 @@ namespace Prefabric.LevelEditor
         public bool IsActive { get; set; }
     }
 
-
     public class EditorCamera : MonoBehaviour
     {
         public Action<Tile, Vector3> Hover;

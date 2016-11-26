@@ -14,6 +14,7 @@ namespace Prefabric.LevelEditor
         public Image Crosshair;
         public Button MenuButton;
         public EditorMenu EditorMenu;
+        public EditorTileSelector EditorTileSelector;
 
         void Start()
         {
@@ -22,7 +23,14 @@ namespace Prefabric.LevelEditor
                 EditorMenu.Toggle();
             });
 
-           MessageBus.OnEvent<EditorCameraStateChangedEvent>().Subscribe(ev =>
+            EditorTileSelector.LoadTileButtons(new[]
+            {
+                PfResourceType.WhiteTile,
+                PfResourceType.StartTile,
+                PfResourceType.EndTile,
+            });
+
+            MessageBus.OnEvent<EditorCameraStateChangedEvent>().Subscribe(ev =>
             {
                 MenuButton.interactable = !ev.IsActive;
 

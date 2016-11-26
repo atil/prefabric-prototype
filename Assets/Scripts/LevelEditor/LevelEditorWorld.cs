@@ -16,8 +16,8 @@ namespace Prefabric.LevelEditor
         private EditorUi _ui;
 
         private LevelLoader _levelLoader;
-
         private List<Tile> _tiles;
+        private PfResourceType _curResource = PfResourceType.WhiteTile;
 
         void Start()
         {
@@ -50,6 +50,11 @@ namespace Prefabric.LevelEditor
 
                 _tiles = _levelLoader.LoadLevelAt(ev.Path);
             });
+
+            MessageBus.OnEvent<EditorTileSelectedEvent>().Subscribe(ev =>
+            {
+                _curResource = ev.SelectedTileResource;
+            });
         }
 
 
@@ -66,7 +71,7 @@ namespace Prefabric.LevelEditor
 
         private void OnCameraLeftClick(Tile hitTile, Vector3 normal)
         {
-            var tileGo = Instantiate(PfResources.Load<GameObject>(PfResourceType.WhiteTile));
+            var tileGo = Instantiate(PfResources.Load<GameObject>(_curResource));
             var newTile = tileGo.GetComponent<Tile>();
             newTile.Init();
             newTile.Position = hitTile.Position + normal;
