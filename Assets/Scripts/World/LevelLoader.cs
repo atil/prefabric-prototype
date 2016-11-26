@@ -66,6 +66,13 @@ namespace Prefabric
             for (var i = 0; i < tiles.Count; i++)
             {
                 var tile = tiles[i];
+
+                // Start/End tiles are not included in "tiles" array
+                if (tile is StartTile || tile is EndTile)
+                {
+                    continue;
+                }
+                
                 tilesNode[i]["x"].AsInt = Mathf.FloorToInt(tile.Position.x);
                 tilesNode[i]["y"].AsInt = Mathf.FloorToInt(tile.Position.y);
                 tilesNode[i]["z"].AsInt = Mathf.FloorToInt(tile.Position.z);
