@@ -28,8 +28,11 @@ namespace Prefabric
             {
                 Transform.rotation = Quaternion.Slerp(Transform.rotation, Quaternion.LookRotation(_cmdMovDir, Vector3.up), Time.deltaTime * 15);
             }
+
             var grounded = _characterController.SimpleMove(_cmdMovDir * MaxSpeed * Time.deltaTime);
             
         }
+
+
     }
 }

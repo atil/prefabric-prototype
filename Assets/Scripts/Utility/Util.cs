@@ -9,10 +9,12 @@ namespace Prefabric
     public static class Layer
     {
         public static LayerMask Tile { get; private set; }
+        public static LayerMask EndZone { get; private set; }
 
         static Layer()
         {
             Tile = LayerMask.NameToLayer("Tile");
+            EndZone = LayerMask.NameToLayer("EndZone");
         }
 
     }

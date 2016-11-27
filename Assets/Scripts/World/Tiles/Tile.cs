@@ -11,7 +11,7 @@ namespace Prefabric
         public Transform Transform { get; private set; }
         public Vector3 Position { get { return Transform.position; } set { Transform.position = value; } }
 
-        public void Init()
+        public virtual void Init()
         {
             Transform = transform;
         }

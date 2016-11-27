@@ -11,6 +11,7 @@ namespace Prefabric
         WhiteTile,
         StartTile,
         EndTile,
+        EndZone,
         EditorTileButton,
     }
 
@@ -23,6 +24,7 @@ namespace Prefabric
             _resourcePaths.Add(PfResourceType.WhiteTile, "Prefabs/Tiles/WhiteTile");
             _resourcePaths.Add(PfResourceType.StartTile, "Prefabs/Tiles/StartTile");
             _resourcePaths.Add(PfResourceType.EndTile, "Prefabs/Tiles/EndTile");
+            _resourcePaths.Add(PfResourceType.EndZone, "Prefabs/Tiles/EndZone");
             _resourcePaths.Add(PfResourceType.EditorTileButton, "LevelEditor/Prefabs/TileButton");
         }
 
