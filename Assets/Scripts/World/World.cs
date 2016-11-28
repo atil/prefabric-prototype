@@ -8,6 +8,8 @@ namespace Prefabric
 {
     public class World : MonoBehaviour
     {
+        public static int LevelIndex = 0; // This is temporary
+
         [SerializeField]
         private Transform _camTransform;
 
@@ -24,12 +26,15 @@ namespace Prefabric
             _keyboardMouseController = new KeyboardMouseController(_camTransform);
             _player = new PlayerAgent(_playerTransform, _keyboardMouseController);
             _agents = new List<AgentBase> { _player };
-            _mapManager = new MapManager(0, _keyboardMouseController, _agents);
+            _mapManager = new MapManager(LevelIndex, _keyboardMouseController, _agents);
+
+            var camView = new CameraView(_camTransform);
+            camView.Follow(_player, 10);
 
             MessageBus.OnEvent<EndZoneTriggeredEvent>().Subscribe(x =>
             {
-                // Advance level counter
-
+                // Advance level
+                LevelIndex++;
                 SceneManager.LoadScene("GameScene");
             });
 	    }
