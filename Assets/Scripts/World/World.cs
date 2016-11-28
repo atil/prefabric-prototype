@@ -23,13 +23,13 @@ namespace Prefabric
 
 	    void Start() 
 	    {
-            _keyboardMouseController = new KeyboardMouseController(_camTransform);
-            _player = new PlayerAgent(_playerTransform, _keyboardMouseController);
+            _keyboardMouseController = new KeyboardMouseController();
+            _player = new PlayerAgent(_playerTransform, _keyboardMouseController, _camTransform);
             _agents = new List<AgentBase> { _player };
             _mapManager = new MapManager(LevelIndex, _keyboardMouseController, _agents);
 
-            var camView = new CameraView(_camTransform);
-            camView.Follow(_player, 10);
+            //var camView = new CameraView(_camTransform);
+            //camView.Follow(_player, 10);
 
             MessageBus.OnEvent<EndZoneTriggeredEvent>().Subscribe(x =>
             {

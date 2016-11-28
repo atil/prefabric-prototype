@@ -93,7 +93,9 @@
     <Compile Include="Assets\Scripts\LevelEditor\LevelEditorWorld.cs" />
     <Compile Include="Assets\Scripts\MessageBus\MessageBus.cs" />
     <Compile Include="Assets\Scripts\PfResources.cs" />
+    <Compile Include="Assets\Scripts\Utility\CoroutineStarter.cs" />
     <Compile Include="Assets\Scripts\Utility\Util.cs" />
+    <Compile Include="Assets\Scripts\World\CameraView.cs" />
     <Compile Include="Assets\Scripts\World\LevelLoader.cs" />
     <Compile Include="Assets\Scripts\World\MapManager.cs" />
     <Compile Include="Assets\Scripts\World\Tiles\EndTile.cs" />

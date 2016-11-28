@@ -8,12 +8,7 @@ namespace Prefabric
 {
     public class KeyboardMouseController : ControllerBase
     {
-        private readonly Transform _camTransform;
-
-        public KeyboardMouseController(Transform camTransform) 
-        {
-            _camTransform = camTransform;
-        }
+        private Vector2 _prevMousePos;
 
         public override void Update()
         {
@@ -22,22 +17,32 @@ namespace Prefabric
             var dir = Vector3.zero;
             if (Input.GetKey(KeyCode.W))
             {
-                dir += _camTransform.forward.Horizontal();
+                dir += Vector3.forward;
             }
             if (Input.GetKey(KeyCode.S))
             {
-                dir += (-_camTransform.forward).Horizontal();
+                dir += Vector3.back;
             }
             if (Input.GetKey(KeyCode.A))
             {
-                dir += (-_camTransform.right).Horizontal();
+                dir += Vector3.left;
             }
             if (Input.GetKey(KeyCode.D))
             {
-                dir += _camTransform.right.Horizontal();
+                dir += Vector3.right;
+            }
+            Move(dir);
+
+            if (Input.GetMouseButton(2))
+            {
+                CamMove((Vector2)Input.mousePosition - _prevMousePos);
+            }
+            else if (Input.GetMouseButton(1))
+            {
+                CamRotate((Vector2)Input.mousePosition - _prevMousePos);
             }
 
-            Move(dir);
+            _prevMousePos = Input.mousePosition;
         }
     }
 }

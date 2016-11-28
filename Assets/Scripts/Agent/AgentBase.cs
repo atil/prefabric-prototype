@@ -19,9 +19,15 @@ namespace Prefabric
             _controller = controller;
 
             _controller.Move += OnMove;
+            _controller.CamMove += OnCamMove;
+            _controller.CamRotate += OnCamRotate;
         }
 
         protected virtual void OnMove(Vector3 dir) { }
+
+        protected virtual void OnCamMove(Vector2 dir) { }
+
+        protected virtual void OnCamRotate(Vector2 dir) { }
 
         public virtual void Update() { }
     }
