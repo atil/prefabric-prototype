@@ -14,6 +14,7 @@ namespace Prefabric
         {
             base.Update();
 
+            // Agent move
             var dir = Vector3.zero;
             if (Input.GetKey(KeyCode.W))
             {
@@ -33,6 +34,7 @@ namespace Prefabric
             }
             Move(dir);
 
+            // Camera move / rotate
             if (Input.GetMouseButton(2))
             {
                 CamMove((Vector2)Input.mousePosition - _prevMousePos);
@@ -41,8 +43,10 @@ namespace Prefabric
             {
                 CamRotate((Vector2)Input.mousePosition - _prevMousePos);
             }
-
             _prevMousePos = Input.mousePosition;
+
+            // Camera zoom
+            CamZoom(Input.GetAxis("Mouse ScrollWheel"));
         }
     }
 }

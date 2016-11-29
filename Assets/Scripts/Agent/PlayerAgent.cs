@@ -10,7 +10,9 @@ namespace Prefabric
 
         private const float CamMoveSpeed = 1f;
         private const float CamRotateSpeed = 1f;
-        private const float CamFollowDistance = 15f;
+        private const float CamZoomSpeed = 400f;
+
+        private float _camFollowDistance = 15f;
         private readonly Transform _camTransform;
         private Vector3 _cmdMovDir;
 
@@ -39,14 +41,30 @@ namespace Prefabric
             _cmdCamTargetPos += _camTransform.up * dir.y * -CamMoveSpeed;
         }
 
+        protected override void OnCamZoom(float amount)
+        {
+            base.OnCamZoom(amount);
+            var deltaZoom = amount * CamZoomSpeed * Time.deltaTime;
+
+            _camFollowDistance -= deltaZoom;
+            _cmdCamTargetPos += _camTransform.forward * deltaZoom;
+        }
+
         protected override void OnCamRotate(Vector2 dir)
         {
             base.OnCamRotate(dir);
-            dir.Normalize();
 
-            var forward = Quaternion.AngleAxis(dir.x * CamRotateSpeed, Vector3.up) * _camTransform.forward;
-            _cmdCamTargetPos = Position + (-forward * CamFollowDistance);
-            _cmdCamTargetRot = Quaternion.LookRotation(forward, Vector3.Cross(_camTransform.right, forward));
+            dir = Vector2.ClampMagnitude(dir, 100);
+
+            // Rotate the cam to be on the sphere around this agent
+            var forward = 
+                Quaternion.AngleAxis(dir.y * -CamRotateSpeed, _camTransform.right)
+                * Quaternion.AngleAxis(dir.x * CamRotateSpeed, Vector3.up) 
+                * _camTransform.forward;
+            _cmdCamTargetPos = Position + (-forward * _camFollowDistance);
+
+            // Always look at the player
+            _cmdCamTargetRot = Quaternion.LookRotation((Position - _camTransform.position), Vector3.up);
         }
 
         public override void Update()
@@ -55,9 +73,15 @@ namespace Prefabric
 
             if (_cmdMovDir.sqrMagnitude > 0.001)
             {
-                Transform.rotation = Quaternion.Slerp(Transform.rotation, Quaternion.LookRotation(_cmdMovDir, Vector3.up), Time.deltaTime * 15);
+                Transform.rotation = Quaternion.Slerp(Transform.rotation, 
+                    Quaternion.LookRotation(_cmdMovDir, Vector3.up), Time.deltaTime * 15);
             }
-            var grounded = _characterController.SimpleMove(_cmdMovDir * MaxSpeed * Time.deltaTime);
+
+            // Move and drag the camera with the same deltaMove
+            var beforeMove = Position;
+            _characterController.SimpleMove(_cmdMovDir * MaxSpeed * Time.deltaTime);
+            var deltaMove = Position - beforeMove;
+            _cmdCamTargetPos += deltaMove;
 
             _camTransform.position = Vector3.Lerp(_camTransform.position, _cmdCamTargetPos, Time.deltaTime * 15);
             _camTransform.rotation = Quaternion.Slerp(_camTransform.rotation, _cmdCamTargetRot, Time.deltaTime * 15);

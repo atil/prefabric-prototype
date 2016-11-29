@@ -23,8 +23,8 @@ namespace Prefabric
         /// Camera movement commands...
         /// </summary>
         public Action<Vector2> CamMove;
-
         public Action<Vector2> CamRotate;
+        public Action<float> CamZoom;
 
         public virtual void Update() { }
     }
