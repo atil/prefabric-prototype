@@ -32,21 +32,17 @@ namespace Prefabric
             {
                 dir += Vector3.right;
             }
-            Move(dir);
+            MessageBus.Publish(new MoveCommand() { Direction = dir });
 
-            // Camera move / rotate
-            if (Input.GetMouseButton(2))
+            // Camera rotate
+            if (Input.GetMouseButton(1))
             {
-                CamMove((Vector2)Input.mousePosition - _prevMousePos);
-            }
-            else if (Input.GetMouseButton(1))
-            {
-                CamRotate((Vector2)Input.mousePosition - _prevMousePos);
+                MessageBus.Publish(new CameraRotateCommand() { Amount = (Vector2)Input.mousePosition - _prevMousePos });
             }
             _prevMousePos = Input.mousePosition;
 
             // Camera zoom
-            CamZoom(Input.GetAxis("Mouse ScrollWheel"));
+            MessageBus.Publish(new CameraZoomCommand() { Amount = Input.GetAxis("Mouse ScrollWheel") });
         }
     }
 }

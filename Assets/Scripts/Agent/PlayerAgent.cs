@@ -11,17 +11,27 @@ namespace Prefabric
         private const float CamMoveSpeed = 1f;
         private const float CamRotateSpeed = 1f;
         private const float CamZoomSpeed = 400f;
+        private const float CamMinDistance = 5f;
+        private const float CamMaxDistance = 20f;
 
         private float _camFollowDistance = 15f;
         private readonly Transform _camTransform;
+        private readonly Camera _cam;
+
+        /// <summary>
+        /// Command received regarding player's movement direction
+        /// </summary>
         private Vector3 _cmdMovDir;
 
+        /// <summary>
+        /// Camera will always try to move to this position
+        /// </summary>
         private Vector3 _cmdCamTargetPos;
-        private Quaternion _cmdCamTargetRot;
 
         public PlayerAgent(Transform transform, ControllerBase controller, Transform camTransform) : base(transform, controller)
         {
             _camTransform = camTransform;
+            _cam = _camTransform.GetComponent<Camera>();
             _cmdCamTargetPos = _camTransform.position;
             _characterController = Transform.GetComponent<CharacterController>();
         }
@@ -32,22 +42,14 @@ namespace Prefabric
             _cmdMovDir = (_camTransform.rotation * dir).Horizontal().normalized;
         }
 
-        protected override void OnCamMove(Vector2 dir)
-        {
-            base.OnCamMove(dir);
-            dir.Normalize();
-
-            _cmdCamTargetPos += _camTransform.right * dir.x * -CamMoveSpeed;
-            _cmdCamTargetPos += _camTransform.up * dir.y * -CamMoveSpeed;
-        }
-
         protected override void OnCamZoom(float amount)
         {
             base.OnCamZoom(amount);
             var deltaZoom = amount * CamZoomSpeed * Time.deltaTime;
 
             _camFollowDistance -= deltaZoom;
-            _cmdCamTargetPos += _camTransform.forward * deltaZoom;
+            _camFollowDistance = Mathf.Clamp(_camFollowDistance, CamMinDistance, CamMaxDistance);
+            _cam.orthographicSize = _camFollowDistance;
         }
 
         protected override void OnCamRotate(Vector2 dir)
@@ -56,15 +58,13 @@ namespace Prefabric
 
             dir = Vector2.ClampMagnitude(dir, 100);
 
-            // Rotate the cam to be on the sphere around this agent
+            // Rotate the cam to be on the sphere around player
             var forward = 
                 Quaternion.AngleAxis(dir.y * -CamRotateSpeed, _camTransform.right)
                 * Quaternion.AngleAxis(dir.x * CamRotateSpeed, Vector3.up) 
                 * _camTransform.forward;
             _cmdCamTargetPos = Position + (-forward * _camFollowDistance);
 
-            // Always look at the player
-            _cmdCamTargetRot = Quaternion.LookRotation((Position - _camTransform.position), Vector3.up);
         }
 
         public override void Update()
@@ -84,7 +84,7 @@ namespace Prefabric
             _cmdCamTargetPos += deltaMove;
 
             _camTransform.position = Vector3.Lerp(_camTransform.position, _cmdCamTargetPos, Time.deltaTime * 15);
-            _camTransform.rotation = Quaternion.Slerp(_camTransform.rotation, _cmdCamTargetRot, Time.deltaTime * 15);
+            _camTransform.LookAt(Position);
         }
 
 

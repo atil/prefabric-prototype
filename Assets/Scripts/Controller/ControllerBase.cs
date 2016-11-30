@@ -6,6 +6,25 @@ using UnityEngine;
 
 namespace Prefabric
 {
+    // Seems like an unnecessary level in inheritence
+    // but I felt I should be explicitly identifying commands
+    public abstract class PfCommand : PfEvent { }
+
+    public class MoveCommand : PfCommand
+    {
+        public Vector3 Direction { get; set; }
+    }
+
+    public class CameraRotateCommand : PfCommand
+    {
+        public Vector2 Amount { get; set; }
+    }
+
+    public class CameraZoomCommand : PfCommand
+    {
+        public float Amount { get; set; }
+    }
+
     /// <summary>
     /// Controllers are command emitters.
     /// These input commands can come from keyboard - mouse,
@@ -14,18 +33,6 @@ namespace Prefabric
     /// </summary>
     public abstract class ControllerBase
     {
-        /// <summary>
-        /// Where the commands come from, most likely they are going to move agents
-        /// </summary>
-        public Action<Vector3> Move;
-
-        /// <summary>
-        /// Camera movement commands...
-        /// </summary>
-        public Action<Vector2> CamMove;
-        public Action<Vector2> CamRotate;
-        public Action<float> CamZoom;
-
         public virtual void Update() { }
     }
 }
