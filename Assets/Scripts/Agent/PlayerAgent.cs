@@ -36,9 +36,12 @@ namespace Prefabric
             _characterController = Transform.GetComponent<CharacterController>();
         }
       
+
         protected override void OnMove(Vector3 dir)
         {
             base.OnMove(dir);
+
+            // Only horizontal movement, for now
             _cmdMovDir = (_camTransform.rotation * dir).Horizontal().normalized;
         }
 
