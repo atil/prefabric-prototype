@@ -25,6 +25,16 @@ namespace Prefabric
         public float Amount { get; set; }
     }
 
+    public class TileHoverCommand : PfCommand
+    {
+        public Tile Tile { get; set; }
+    }
+
+    public class TileSelectCommand : PfCommand
+    {
+        public Tile Tile { get; set; }
+    }
+
     /// <summary>
     /// Controllers are command emitters.
     /// These input commands can come from keyboard - mouse,

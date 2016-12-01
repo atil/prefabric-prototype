@@ -1,4 +1,4 @@
-﻿using System;   
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,6 +6,9 @@ using UnityEngine;
 
 namespace Prefabric
 {
+    /// <summary>
+    /// Emits commands from WASD-mouse controls
+    /// </summary>
     public class KeyboardMouseController : ControllerBase
     {
         private Vector2 _prevMousePos;
@@ -33,6 +36,24 @@ namespace Prefabric
                 dir += Vector3.right;
             }
             MessageBus.Publish(new MoveCommand() { Direction = dir });
+
+            // Tile selecting / hovering on
+            RaycastHit hit;
+            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, float.MaxValue, 1 << Layer.Tile))
+            {
+                var hitTile = hit.transform.GetComponent<Tile>();
+                if (!(hitTile is StartTile) && !(hitTile is EndTile))
+                {
+                    if (Input.GetMouseButtonDown(0))
+                    {
+                        MessageBus.Publish(new TileSelectCommand() { Tile = hitTile });
+                    }
+                    else
+                    {
+                        MessageBus.Publish(new TileHoverCommand() { Tile = hitTile });
+                    }
+                }
+            }
 
             // Camera rotate
             if (Input.GetMouseButton(1))

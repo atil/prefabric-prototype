@@ -28,9 +28,6 @@ namespace Prefabric
             _agents = new List<AgentBase> { _player };
             _mapManager = new MapManager(LevelIndex, _keyboardMouseController, _agents);
 
-            //var camView = new CameraView(_camTransform);
-            //camView.Follow(_player, 10);
-
             MessageBus.OnEvent<EndZoneTriggeredEvent>().Subscribe(x =>
             {
                 // Advance level
