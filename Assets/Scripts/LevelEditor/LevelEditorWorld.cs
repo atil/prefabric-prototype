@@ -26,10 +26,10 @@ namespace Prefabric.LevelEditor
 
             _levelLoader = new LevelLoader();
             _tiles = _levelLoader.LoadLevelAt("Levels/testLevel");
-            foreach (var tile in _tiles)
-            {
-                tile.Init();
-            }
+            //foreach (var tile in _tiles)
+            //{
+            //    tile.Init();
+            //}
 
             _camera.HoverEnter += OnCameraHoverEnter;
             _camera.HoverExit += OnCameraHoverExit;
@@ -81,7 +81,7 @@ namespace Prefabric.LevelEditor
         {
             var tileGo = Instantiate(PfResources.Load<GameObject>(_curResource));
             var newTile = tileGo.GetComponent<Tile>();
-            newTile.Init();
+            newTile.Init(Guid.NewGuid());
             newTile.Position = hitTile.Position + normal;
             _tiles.Add(newTile);
         }

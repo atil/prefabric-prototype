@@ -8,9 +8,9 @@ namespace Prefabric
 {
     public class EndTile : Tile
     {
-        public override void Init()
+        public override void Init(Guid id)
         {
-            base.Init();
+            base.Init(id);
 
             var endZonePrefab = PfResources.Load<GameObject>(PfResourceType.EndZone);
 

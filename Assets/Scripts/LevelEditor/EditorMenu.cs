@@ -28,7 +28,7 @@ namespace Prefabric.LevelEditor
             {
                 // Temporarily bound to UnityEditor
                 var path = UnityEditor.EditorUtility
-                    .SaveFilePanelInProject("Save Level", "UntitledLevel", "json", "Save level to..");
+                    .SaveFilePanel("Save Level", "Assets/Resources/Levels", "UntitledLevel", "json");
 
                 MessageBus.Publish(new EditorSaveLevelEvent() { Path = path });
             });

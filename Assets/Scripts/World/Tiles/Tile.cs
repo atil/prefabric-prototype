@@ -39,6 +39,11 @@ namespace Prefabric
         [SerializeField]
         private Color _selectColor;
 
+        [SerializeField] // To make it appear in the inspector
+        private string _id;
+        public Guid Id { get; private set; }
+
+        // These shortcuts really come in handy
         public Transform Transform { get; private set; }
         public Vector3 Position { get { return Transform.position; } set { Transform.position = value; } }
 
@@ -73,9 +78,10 @@ namespace Prefabric
         // We won't have thousands of cubes, like we do in Fabric
         private Material _material;
 
-        public virtual void Init()
+        public virtual void Init(Guid id)
         {
             Transform = transform;
+            Id = id;
             _material = GetComponent<Renderer>().material;
             _normalColor = _material.color;
             VisualState = TileState.Normal;
