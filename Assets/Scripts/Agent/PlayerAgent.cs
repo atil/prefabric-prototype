@@ -28,14 +28,13 @@ namespace Prefabric
         /// </summary>
         private Vector3 _cmdCamTargetPos;
 
-        public PlayerAgent(Transform transform, ControllerBase controller, Transform camTransform) : base(transform, controller)
+        public PlayerAgent(Transform transform, Transform camTransform) : base(transform)
         {
             _camTransform = camTransform;
             _cam = _camTransform.GetComponent<Camera>();
             _cmdCamTargetPos = _camTransform.position;
             _characterController = Transform.GetComponent<CharacterController>();
         }
-      
 
         protected override void OnMove(Vector3 dir)
         {

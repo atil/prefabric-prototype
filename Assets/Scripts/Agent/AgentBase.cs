@@ -12,13 +12,9 @@ namespace Prefabric
             set { Transform.position = value; }
         }
 
-        protected readonly ControllerBase _controller;
-
-        public AgentBase(Transform transform, ControllerBase controller)
+        public AgentBase(Transform transform)
         {
             Transform = transform;
-            _controller = controller;
-
             MessageBus.OnEvent<MoveCommand>().Subscribe(ev => OnMove(ev.Direction));
             MessageBus.OnEvent<CameraRotateCommand>().Subscribe(ev => OnCamRotate(ev.Amount));
             MessageBus.OnEvent<CameraZoomCommand>().Subscribe(ev => OnCamZoom(ev.Amount));
