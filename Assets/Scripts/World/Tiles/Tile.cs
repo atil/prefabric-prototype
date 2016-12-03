@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Prefabric
 {
-    public enum TileState
+    public enum TileVisualState
     {
         None,
         Normal,
@@ -47,23 +47,23 @@ namespace Prefabric
         public Transform Transform { get; private set; }
         public Vector3 Position { get { return Transform.position; } set { Transform.position = value; } }
 
-        private TileState _state;
-        public TileState VisualState
+        private TileVisualState _state;
+        public TileVisualState VisualState
         {
             get { return _state; }
             set
             {
                 switch (value)
                 {
-                    case TileState.None:
+                    case TileVisualState.None:
                         break;
-                    case TileState.Normal:
+                    case TileVisualState.Normal:
                         _material.color = _normalColor;
                         break;
-                    case TileState.Hovered:
+                    case TileVisualState.Hovered:
                         _material.color = _hoverColor;
                         break;
-                    case TileState.Selected:
+                    case TileVisualState.Selected:
                         _material.color = _selectColor;
                         break;
                     default:
@@ -84,7 +84,7 @@ namespace Prefabric
             Id = id;
             _material = GetComponent<Renderer>().material;
             _normalColor = _material.color;
-            VisualState = TileState.Normal;
+            VisualState = TileVisualState.Normal;
         }
 
         public void ExternalUpdate()

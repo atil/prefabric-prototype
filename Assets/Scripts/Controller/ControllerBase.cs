@@ -35,6 +35,8 @@ namespace Prefabric
         public Tile Tile { get; set; }
     }
 
+    public class UnbendCommand : PfCommand { }
+
     /// <summary>
     /// Controllers are command emitters.
     /// These input commands can come from keyboard - mouse,

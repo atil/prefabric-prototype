@@ -8,18 +8,16 @@ namespace Prefabric
 {
     public class MapManager
     {
-        private ControllerBase _controller;
         private List<AgentBase> _agents = new List<AgentBase>();
         private PlayerAgent _player;
         private List<Tile> _tiles;
-        private LevelLoader _levelLoader = new LevelLoader();
+        private readonly LevelLoader _levelLoader = new LevelLoader();
 
         private Tile _hoverTile;
         private Tile _firstSelectedTile;
 
-        private void Init(List<Tile> tiles, ControllerBase controller, List<AgentBase> agents)
+        private void Init(List<Tile> tiles, List<AgentBase> agents)
         {
-            _controller = controller;
             _agents = agents;
             _player = _agents.Find(x => x is PlayerAgent) as PlayerAgent;
 
@@ -30,16 +28,21 @@ namespace Prefabric
 
             MessageBus.OnEvent<TileSelectCommand>().Subscribe(ev => OnTileSelected(ev.Tile));
             MessageBus.OnEvent<TileHoverCommand>().Subscribe(ev => OnTileHover(ev.Tile));
+
+            MessageBus.OnEvent<UnbendCommand>().Subscribe(ev =>
+            {
+                Unbend();
+            });
         }
 
-        public MapManager(string lvlPath, ControllerBase controller, List<AgentBase> agents)
+        public MapManager(string lvlPath, List<AgentBase> agents)
         {
-            Init(_levelLoader.LoadLevelAt(lvlPath), controller, agents);
+            Init(_levelLoader.LoadLevelAt(lvlPath), agents);
         }
 
-        public MapManager(int lvlNum, ControllerBase controller, List<AgentBase> agents)
+        public MapManager(int lvlNum, List<AgentBase> agents)
         {
-            Init(_levelLoader.LoadLevelAt(lvlNum), controller, agents);
+            Init(_levelLoader.LoadLevelAt(lvlNum), agents);
         }
 
         private void OnTileHover(Tile tile)
@@ -51,17 +54,17 @@ namespace Prefabric
 
             // Unselect old hover
             if (_hoverTile != null // Will be null for the first assignment
-                 && _hoverTile.VisualState != TileState.Selected) // Don't touch selected tile visuals
+                 && _hoverTile.VisualState != TileVisualState.Selected) // Don't touch selected tile visuals
             {
-                _hoverTile.VisualState = TileState.Normal;
+                _hoverTile.VisualState = TileVisualState.Normal;
 
             }
 
             _hoverTile = tile;
 
-            if (_hoverTile.VisualState != TileState.Selected) // Don't touch selected tile visuals
+            if (_hoverTile.VisualState != TileVisualState.Selected) // Don't touch selected tile visuals
             {
-                _hoverTile.VisualState = TileState.Hovered;
+                _hoverTile.VisualState = TileVisualState.Hovered;
             }
         }
 
@@ -71,38 +74,35 @@ namespace Prefabric
             if (_firstSelectedTile == null) 
             {
                 _firstSelectedTile = tile;
-                _firstSelectedTile.VisualState = TileState.Selected;
+                _firstSelectedTile.VisualState = TileVisualState.Selected;
                 return;
             }
 
             // Selecting two non-aligned tiles
             if (!Tile.IsAxisAligned(_firstSelectedTile, tile))
             {
-                _firstSelectedTile.VisualState = TileState.Normal;
+                _firstSelectedTile.VisualState = TileVisualState.Normal;
                 _firstSelectedTile = tile;
-                _firstSelectedTile.VisualState = TileState.Selected;
+                _firstSelectedTile.VisualState = TileVisualState.Selected;
                 return;
             }
 
             // Actual bending
             Bend(_firstSelectedTile, tile);
 
-            _firstSelectedTile.VisualState = TileState.Normal;
+            _firstSelectedTile.VisualState = TileVisualState.Normal;
             _firstSelectedTile = null;
         }
 
         private void Bend(Tile tile1, Tile tile2)
         {
             // Here be dragons
-            var go1 = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-            go1.transform.position = tile1.Position + Vector3.up;
-            var go2 = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-            go2.transform.position = tile2.Position + Vector3.up;
-            GameObject.Destroy(go1, 1f);
-            GameObject.Destroy(go2, 1f);
-
             Debug.Log("Bend!");
+        }
 
+        private void Unbend()
+        {
+            Debug.Log("Unbend!");
         }
 
         public void Update()

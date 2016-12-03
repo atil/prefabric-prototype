@@ -12,6 +12,7 @@ namespace Prefabric
     public class KeyboardMouseController : ControllerBase
     {
         private Vector2 _prevMousePos;
+        private float _doubleClickTimer;
 
         public override void Update()
         {
@@ -61,6 +62,18 @@ namespace Prefabric
                 MessageBus.Publish(new CameraRotateCommand() { Amount = (Vector2)Input.mousePosition - _prevMousePos });
             }
             _prevMousePos = Input.mousePosition;
+
+            // Double click
+            if (Input.GetMouseButtonDown(1))
+            {
+                if (_doubleClickTimer < 0.5f)
+                {
+                    MessageBus.Publish(new UnbendCommand());
+                }
+
+                _doubleClickTimer = 0;
+            }
+            _doubleClickTimer += Time.deltaTime;
 
             // Camera zoom
             MessageBus.Publish(new CameraZoomCommand() { Amount = Input.GetAxis("Mouse ScrollWheel") });

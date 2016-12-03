@@ -26,7 +26,7 @@ namespace Prefabric
             _keyboardMouseController = new KeyboardMouseController();
             _player = new PlayerAgent(_playerTransform, _camTransform);
             _agents = new List<AgentBase> { _player };
-            _mapManager = new MapManager(LevelIndex, _keyboardMouseController, _agents);
+            _mapManager = new MapManager(LevelIndex, _agents);
 
             MessageBus.OnEvent<EndZoneTriggeredEvent>().Subscribe(x =>
             {
