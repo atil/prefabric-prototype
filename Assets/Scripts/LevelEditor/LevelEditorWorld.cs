@@ -26,10 +26,6 @@ namespace Prefabric.LevelEditor
 
             _levelLoader = new LevelLoader();
             _tiles = _levelLoader.LoadLevelAt("Levels/testLevel");
-            //foreach (var tile in _tiles)
-            //{
-            //    tile.Init();
-            //}
 
             _camera.HoverEnter += OnCameraHoverEnter;
             _camera.HoverExit += OnCameraHoverExit;

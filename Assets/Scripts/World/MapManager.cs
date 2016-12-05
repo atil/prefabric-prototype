@@ -9,16 +9,30 @@ namespace Prefabric
 {
     public class TweenCompletedEvent : PfEvent { }
 
+    public class BendEvent : PfEvent
+    {
+        public Tile Bender1 { get; set; }
+        public Tile Bender2 { get; set; }
+    }
+
+    public class UnbendEvent : PfEvent { }
+
+    public class BendFailEvent : PfEvent
+    {
+        public Tile Bender1 { get; set; }
+        public Tile Bender2 { get; set; }
+    }
+
     public class MapManager
     {
         private List<AgentBase> _agents = new List<AgentBase>();
         private PlayerAgent _player;
         private List<Tile> _tiles;
         private readonly LevelLoader _levelLoader = new LevelLoader();
-
+        
         private Tile _hoverTile;
         private Tile _firstSelectedTile;
-
+        private readonly Stack<Tuple<Tile, Tile>> _bendHistory = new Stack<Tuple<Tile, Tile>>();
         private int _currentTweenerCount;
 
         private void Init(List<Tile> tiles, List<AgentBase> agents)
@@ -98,6 +112,13 @@ namespace Prefabric
 
         private void Bend(Tile tile1, Tile tile2)
         {
+            // No bending while a tween is in progress
+            if (_currentTweenerCount > 0)
+            {
+                return;
+            }
+
+            // The direction on which these tiles are aligned
             Vector3 alignedDir;
             if (Mathf.Approximately(tile1.Position.y, tile2.Position.y) && Mathf.Approximately(tile1.Position.z, tile2.Position.z))
             {
@@ -115,30 +136,53 @@ namespace Prefabric
             var proj1 = Vector3.Dot(tile1.Position, alignedDir);
             var proj2 = Vector3.Dot(tile2.Position, alignedDir);
 
+            // Player shouldn't stand in between bending tiles
+            // (That's gonna be a thing to explain, speaking from experience)
             var playerProj = Vector3.Dot(_player.Position, alignedDir);
             if (playerProj > proj1 && playerProj < proj2)
             {
+                MessageBus.Publish(new BendFailEvent()
+                {
+                    Bender1 = tile1,
+                    Bender2 = tile2,
+                });
+
                 return;
             }
 
+            // The distance which the tiles are going to be displaced
+            // Subtracting 0.5 to snap to grid
             var moveDistance = Vector3.Distance(tile1.Position, tile2.Position) / 2 - 0.5f;
             foreach (var tile in _tiles)
             {
                 var tileProj = Vector3.Dot(tile.Position, alignedDir);
-                var targetPos = Vector3.zero;
+                Vector3 targetPos;
                 var isBent = false;
-                if (tileProj >= proj1 && tileProj >= proj2)
+
+                // These 3 cases correspond the 3 zones which are emerged from 
+                // dissecting the space with 2 planes
+                if (tileProj >= proj1 && tileProj >= proj2) // Upper
                 {
                     targetPos = alignedDir * -moveDistance + tile.Position;
                 }
-                else if (tileProj > proj1 && tileProj < proj2)
-                {
-                    targetPos = tile.Position + Vector3.down * Random.Range(50f, 150f) * Mathf.Sign(Random.Range(-1f, 1f));
-                    isBent = true;
-                }
-                else if (tileProj <= proj1 && tileProj <= proj2)
+                else if (tileProj <= proj1 && tileProj <= proj2) // Lower
                 {
                     targetPos = alignedDir * moveDistance + tile.Position;
+                }
+                else // In between -- these are going to be flown away
+                {
+                    // If doing a vertical bend, add a little randomness to flyAwayDir. Looks better
+                    var flyAwayDir = Vector3.down;
+                    if (alignedDir == Vector3.up)
+                    {
+                        flyAwayDir = Random.value > 0.5 ? Vector3.forward : Vector3.right;
+                    }
+
+                    targetPos = tile.Position 
+                        + flyAwayDir 
+                            * Random.Range(50f, 150f) // Should go out of screen
+                            * Mathf.Sign(Random.Range(-1f, 1f)); // Randomly, up or down
+                    isBent = true;
                 }
 
                 tile.Bend(new TileState()
@@ -149,18 +193,32 @@ namespace Prefabric
                 _currentTweenerCount++;
             }
 
-            var dist1 = Vector3.Distance(_player.Position, tile1.Position);
-            var dist2 = Vector3.Distance(_player.Position, tile2.Position);
-            _player.Transform.parent = dist1 < dist2 ? tile1.Transform : tile2.Transform;
+            MessageBus.Publish(new BendEvent()
+            {
+                Bender1 = tile1,
+                Bender2 = tile2,
+            });
+
+            _bendHistory.Push(new Tuple<Tile, Tile>(tile1, tile2));
         }
 
         private void Unbend()
         {
+            if (_currentTweenerCount > 0 // No unbending while another tweening is active
+                || _bendHistory.Count == 0) // ..or nothing to unbend
+            {
+                return;
+            }
+
+            _bendHistory.Pop();
+
+            _currentTweenerCount = _tiles.Count;
             foreach (var tile in _tiles)
             {
                 tile.Unbend();
-                _currentTweenerCount++;
             }
+
+            MessageBus.Publish(new UnbendEvent());
         }
 
         private void OnTileCompletedTween(Tile tile)

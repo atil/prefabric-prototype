@@ -40,7 +40,7 @@ namespace Prefabric
             if (!Mathf.Approximately(result.y, 0f)) result.y = 1f;
             if (!Mathf.Approximately(result.z, 0f)) result.z = 1f;
 
-            return Mathf.Approximately(result.sqrMagnitude, 1);
+            return Mathf.Approximately(result.sqrMagnitude, 1f);
         }
 
         // These are to be removed when we move onto a custom shader
@@ -98,9 +98,6 @@ namespace Prefabric
         private readonly Stack<TileState> _history = new Stack<TileState>();
         private Vector3 _initialPosition;
 
-        [SerializeField]
-        private bool _isTweening;
-
         public virtual void Init(Guid id)
         {
             Transform = transform;
@@ -125,29 +122,20 @@ namespace Prefabric
             Position = targetPosition;
 
             MessageBus.Publish(new TileTweenCompletedEvent() {Tile = this});
-            _isTweening = false;
         }
 
         public void Bend(TileState nextState)
         {
-            if (_isTweening)
-            {
-                return;
-            }
-
-            _isTweening = true;
             _history.Push(nextState);
             CoroutineStarter.StartCoroutine(TweenCoroutine(nextState.Position));
         }
 
         public void Unbend()
         {
-            if (_isTweening || _history.Count == 0)
+            if (_history.Count == 0)
             {
                 return;
             }
-
-            _isTweening = true;
 
             _history.Pop();
 

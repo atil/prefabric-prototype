@@ -1,14 +1,13 @@
-﻿using UnityEngine;
+﻿using UniRx;
+using UnityEngine;
 
 namespace Prefabric
 {
     public class PlayerAgent : AgentBase
     {
         private const float MaxSpeed = 300f;
-        private const float Gravity = 10f;
         private readonly CharacterController _characterController;
 
-        private const float CamMoveSpeed = 1f;
         private const float CamRotateSpeed = 1f;
         private const float CamZoomSpeed = 400f;
         private const float CamMinDistance = 5f;
@@ -28,12 +27,29 @@ namespace Prefabric
         /// </summary>
         private Vector3 _cmdCamTargetPos;
 
+        private Tile _lastStandingTile;
+
         public PlayerAgent(Transform transform, Transform camTransform) : base(transform)
         {
             _camTransform = camTransform;
             _cam = _camTransform.GetComponent<Camera>();
             _cmdCamTargetPos = _camTransform.position;
             _characterController = Transform.GetComponent<CharacterController>();
+
+            // To make the player stay on the map with bends / unbends
+            // Make it child of the tile it's currently standing on
+            MessageBus.OnEvent<BendEvent>().Subscribe(ev =>
+            {
+                Transform.SetParent(_lastStandingTile.Transform);
+            });
+            MessageBus.OnEvent<UnbendEvent>().Subscribe(ev =>
+            {
+                Transform.SetParent(_lastStandingTile.Transform);
+            });
+            MessageBus.OnEvent<TweenCompletedEvent>().Subscribe(ev =>
+            {
+                Transform.SetParent(null);
+            });
         }
 
         protected override void OnMove(Vector3 dir)
@@ -87,6 +103,13 @@ namespace Prefabric
 
             _camTransform.position = Vector3.Lerp(_camTransform.position, _cmdCamTargetPos, Time.deltaTime * 15);
             _camTransform.LookAt(Position);
+
+            // Store last standing tile
+            RaycastHit hit;
+            if (Physics.Raycast(Position, Vector3.down, out hit, 2f, 1 << Layer.Tile))
+            {
+                _lastStandingTile = hit.transform.GetComponent<Tile>();
+            }
         }
 
 
