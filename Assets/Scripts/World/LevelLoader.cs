@@ -65,11 +65,13 @@ namespace Prefabric
             {
                 var tileId = tileEntry["id"].Value;
                 var tilePos = new Vector3(tileEntry["x"].AsInt, tileEntry["y"].AsInt, tileEntry["z"].AsInt);
-                // TODO ATIL: Instantiating under a transform
+                if (tilePos == Vector3.zero)
+                {
+                    var a = 3;
+                }
                 var tileGo = UnityEngine.Object.Instantiate(whiteTilePrefab, tilePos, Quaternion.identity) as GameObject;
                 var tile = tileGo.GetComponent<Tile>();
                 tile.Init(Guid.NewGuid());
-                //tile.Init(new Guid(tileId));
                 tiles.Add(tileGo.GetComponent<Tile>());
             }
 
@@ -90,7 +92,6 @@ namespace Prefabric
             var endTileGo = UnityEngine.Object.Instantiate(endTilePrefab, endTilePos, Quaternion.identity) as GameObject;
             var endTile = endTileGo.GetComponent<EndTile>();
             endTile.Init(Guid.NewGuid());
-            //endTile.Init(new Guid(endTileId));
             tiles.Add(endTile);
 
             return tiles;
@@ -126,26 +127,20 @@ namespace Prefabric
 
             var tilesNode = lvlJson["tiles"];
             var i = 0;
-            for (i = 0; i < tiles.Count; i++)
+            foreach(var tile in tiles.Where(t => !(t is StartTile) && !(t is EndTile)))
             {
-                var tile = tiles[i];
-
-                // Start/End tiles are not included in "tiles" array
-                if (tile is StartTile || tile is EndTile)
-                {
-                    continue;
-                }
-
                 tilesNode[i]["id"].Value = tile.Id.ToString();
                 tilesNode[i]["x"].AsInt = Mathf.FloorToInt(tile.Position.x);
                 tilesNode[i]["y"].AsInt = Mathf.FloorToInt(tile.Position.y);
                 tilesNode[i]["z"].AsInt = Mathf.FloorToInt(tile.Position.z);
+                i++;
             }
 
             lvlJson["startTile"]["id"].Value = startTile.Id.ToString();
             lvlJson["startTile"]["x"].AsInt = Mathf.FloorToInt(startTile.Position.x);
             lvlJson["startTile"]["y"].AsInt = Mathf.FloorToInt(startTile.Position.y);
             lvlJson["startTile"]["z"].AsInt = Mathf.FloorToInt(startTile.Position.z);
+
             lvlJson["endtile"]["id"].Value = endTile.Id.ToString();
             lvlJson["endTile"]["x"].AsInt = Mathf.FloorToInt(endTile.Position.x);
             lvlJson["endTile"]["y"].AsInt = Mathf.FloorToInt(endTile.Position.y);

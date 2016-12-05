@@ -3,3 +3,4 @@ Temp/
 Assets/Plugins/UniRx/Examples
 .vs/
 Gifs/
+*.csproj

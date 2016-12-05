@@ -79,26 +79,25 @@ namespace UniRx
             {
                 if (isDisposed) throw new ObjectDisposedException("MessageBroker");
 
-                // Existing implementation (below) didn't allow replacing events
-                //if (!notifiers.TryGetValue(typeof(T), out notifier))
-                //{
-                //    ISubject<T> n = new Subject<T>().Synchronize();
-                //    notifier = n;
-                //    notifiers.Add(typeof(T), notifier);
-                //}
-
-                ISubject<T> n = new Subject<T>().Synchronize();
-                notifier = n;
-                
-                // Renewing an existing event
-                if (notifiers.ContainsKey(typeof(T)))
+                if (!notifiers.TryGetValue(typeof(T), out notifier))
                 {
-                    notifiers[typeof(T)] = notifier;
-                }
-                else // Registering a new event
-                {
+                    ISubject<T> n = new Subject<T>().Synchronize();
+                    notifier = n;
                     notifiers.Add(typeof(T), notifier);
                 }
+
+                //ISubject<T> n = new Subject<T>().Synchronize();
+                //notifier = n;
+
+                //// Renewing an existing event
+                //if (notifiers.ContainsKey(typeof(T)))
+                //{
+                //    notifiers[typeof(T)] = notifier;
+                //}
+                //else // Registering a new event
+                //{
+                //    notifiers.Add(typeof(T), notifier);
+                //}
 
             }
 
