@@ -122,7 +122,6 @@ namespace Prefabric.LevelEditor
             }
 
             // Left click
-
             if (!EventSystem.current.IsPointerOverGameObject())
             {
                 if (Input.GetMouseButtonDown(0))
@@ -150,6 +149,14 @@ namespace Prefabric.LevelEditor
                     }
                 }
             }
+            
+            // Reset camera
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                _tr.position = Vector3.forward * -10;
+                _tr.rotation = Quaternion.LookRotation(Vector3.forward, Vector3.up);
+            }
+
         }
 
     }
