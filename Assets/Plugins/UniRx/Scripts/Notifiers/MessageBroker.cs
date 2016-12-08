@@ -20,7 +20,16 @@ namespace UniRx
         IObservable<T> Receive<T>();
     }
 
-    public interface IMessageBroker : IMessagePublisher, IMessageReceiver
+    public interface IMessageRemover
+    {
+        /// <summary>
+        /// This sounds pretty stupid
+        /// </summary>
+        /// <param name="t"></param>
+        void Remove(Type t);
+    }
+
+    public interface IMessageBroker : IMessagePublisher, IMessageReceiver, IMessageRemover
     {
     }
 
@@ -102,6 +111,14 @@ namespace UniRx
             }
 
             return ((IObservable<T>)notifier).AsObservable();
+        }
+
+        public void Remove(Type t)
+        {
+            lock (notifiers)
+            {
+                notifiers.Remove(t);
+            }
         }
 
         public void Dispose()

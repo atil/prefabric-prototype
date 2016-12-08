@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace Prefabric
 {
-    public class TileTweenCompletedEvent : PfEvent
+    public class TileTweenCompletedEvent : PfSceneEvent
     {
         public Tile Tile { get; set; }
     }

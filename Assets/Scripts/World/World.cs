@@ -52,7 +52,7 @@ namespace Prefabric
             // To make testing easier
             if (Input.GetKeyDown(KeyCode.R))
             {
-                SceneManager.LoadScene("GameScene");
+                PfScene.Load("GameScene");
             }
         }
     }

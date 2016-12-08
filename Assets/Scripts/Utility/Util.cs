@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using UnityEngine;
 
@@ -24,6 +25,21 @@ namespace Prefabric
         public static Vector3 Horizontal(this Vector3 v)
         {
             return Vector3.ProjectOnPlane(v, Vector3.up);
+        }
+
+        public static FieldInfo[] GetFieldsMarkedWith<T>(object obj) where T : Attribute
+        {
+            return obj.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Instance)
+                    .Where(x => x.GetCustomAttributes(typeof(T), true).Any()).ToArray();
+        }
+
+        public static Type[] GetChildrenTypesOf<T>()
+        {
+            return (from domainAssembly in AppDomain.CurrentDomain.GetAssemblies()
+                            from assemblyType in domainAssembly.GetTypes()
+                            where typeof(T).IsAssignableFrom(assemblyType) && assemblyType != typeof(T)
+                            select assemblyType).ToArray();
+
         }
     }
 }

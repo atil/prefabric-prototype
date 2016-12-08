@@ -8,7 +8,7 @@ namespace Prefabric
 {
     // Seems like an unnecessary level in inheritence
     // but I felt I should be explicitly identifying commands
-    public abstract class PfCommand : PfEvent { }
+    public abstract class PfCommand : PfSceneEvent { }
 
     public class MoveCommand : PfCommand
     {

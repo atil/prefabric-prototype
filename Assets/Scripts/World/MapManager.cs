@@ -7,17 +7,17 @@ using UniRx;
 
 namespace Prefabric
 {
-    public class TweenCompletedEvent : PfEvent { }
+    public class TweenCompletedEvent : PfSceneEvent { }
 
-    public class BendEvent : PfEvent
+    public class BendEvent : PfSceneEvent
     {
         public Tile Bender1 { get; set; }
         public Tile Bender2 { get; set; }
     }
 
-    public class UnbendEvent : PfEvent { }
+    public class UnbendEvent : PfSceneEvent { }
 
-    public class BendFailEvent : PfEvent
+    public class BendFailEvent : PfSceneEvent
     {
         public Tile Bender1 { get; set; }
         public Tile Bender2 { get; set; }

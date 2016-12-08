@@ -4,10 +4,9 @@ using UnityEngine;
 
 namespace Prefabric
 {
-    public abstract class PfEvent
-    {
+    public abstract class PfEvent { }
 
-    }
+    public abstract class PfSceneEvent : PfEvent { }
 
     public static class MessageBus
     {
@@ -19,6 +18,14 @@ namespace Prefabric
         public static UniRx.IObservable<T> OnEvent<T>() where T : PfEvent
         {
             return UniRx.MessageBroker.Default.Receive<T>();
+        }
+
+        public static void ClearSceneEvents()
+        {
+            foreach (var type in Util.GetChildrenTypesOf<PfSceneEvent>())
+            {
+                UniRx.MessageBroker.Default.Remove(type);
+            }
         }
     }
 }

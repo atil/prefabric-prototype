@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Prefabric
 {
-    public class EndZoneTriggeredEvent : PfEvent { }
+    public class EndZoneTriggeredEvent : PfSceneEvent { }
 
     public class PlayerAgentView : MonoBehaviour
     {
