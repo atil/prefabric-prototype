@@ -97,7 +97,7 @@ namespace Prefabric
 
             // Move and drag the camera with the same deltaMove
             var beforeMove = Position;
-            _characterController.SimpleMove(_cmdMovDir * MaxSpeed * Time.deltaTime);
+            _characterController.SimpleMove(_cmdMovDir * MaxSpeed * PfTime.DeltaTime);
             var deltaMove = Position - beforeMove;
             _cmdCamTargetPos += deltaMove;
 

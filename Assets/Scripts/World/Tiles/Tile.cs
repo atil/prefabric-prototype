@@ -116,7 +116,7 @@ namespace Prefabric
         {
             while (Vector3.Distance(targetPosition, Position) > 0.1)
             {
-                Position = Vector3.Lerp(Position, targetPosition, Time.deltaTime * 5);
+                Position = Vector3.Lerp(Position, targetPosition, PfTime.DeltaTime * 5);
                 yield return null;
             }
             Position = targetPosition;
