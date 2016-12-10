@@ -23,6 +23,9 @@ namespace Prefabric
         public Tile Bender2 { get; set; }
     }
 
+    /// <summary>
+    /// Handles everything related to tiles
+    /// </summary>
     public class MapManager
     {
         private List<AgentBase> _agents = new List<AgentBase>();

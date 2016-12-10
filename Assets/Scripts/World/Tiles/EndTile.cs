@@ -13,7 +13,7 @@ namespace Prefabric
         {
             base.Init(id);
 
-            // No enzones in the editor
+            // No endzones in the editor
             // I should probably centralize this game / editor distinction
             if (SceneManager.GetActiveScene().name == "LevelEditorScene")
             {
