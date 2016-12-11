@@ -6,8 +6,11 @@ using UnityEngine;
 
 namespace Prefabric
 {
-    // Seems like an unnecessary level in inheritence
-    // but I felt I should be explicitly identifying commands
+    /// <summary>
+    /// Commands are basic things that are told to world and agents
+    /// Seems like an unnecessary level in inheritence 
+    /// but I felt I should be explicitly identifying commands
+    /// </summary>
     public abstract class PfCommand : PfSceneEvent { }
 
     public class MoveCommand : PfCommand
@@ -42,6 +45,7 @@ namespace Prefabric
     /// These input commands can come from keyboard - mouse,
     /// gamepad, touch, VR hand things and (bear with me),
     /// deserialized byte stream (recorded demo), A.I, network input etc.
+    /// For more details, visit: http://atilkockar.com/prefabric-devlog-1/
     /// </summary>
     public abstract class ControllerBase
     {

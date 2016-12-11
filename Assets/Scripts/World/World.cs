@@ -1,15 +1,16 @@
 ﻿using UnityEngine;
-using System.Collections;
 using UniRx;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 
 namespace Prefabric
 {
+    /// <summary>
+    /// This is the main MonoBehaviour of GameScene
+    /// This Start() and Update() functions are what keeps the game running
+    /// </summary>
     public class World : MonoBehaviour
     {
-        public static int LevelIndex = 0; // This is temporary
-
         [SerializeField]
         private Transform _camTransform;
 
@@ -21,18 +22,28 @@ namespace Prefabric
         private MapManager _mapManager;
         private PlayerAgent _player;
 
-	    void Start() 
+	    void Start()
 	    {
+	        var args = GameSceneArgs.Load();
+
             _keyboardMouseController = new KeyboardMouseController();
             _player = new PlayerAgent(_playerTransform, _camTransform);
             _agents = new List<AgentBase> { _player };
-            _mapManager = new MapManager(LevelIndex, _agents);
+            _mapManager = new MapManager(args.LevelName, _agents);
 
             MessageBus.OnEvent<EndZoneTriggeredEvent>().Subscribe(x =>
             {
                 // Advance level
-                LevelIndex++;
-                SceneManager.LoadScene("GameScene");
+                var curLevelIndex = LevelPaths.Paths.IndexOf(args.LevelName);
+                if (++curLevelIndex >= LevelPaths.Paths.Count)
+                {
+                    // TODO: All levels done, endgame
+                }
+                else
+                {
+                    GameSceneArgs.Write(LevelPaths.Paths[curLevelIndex]);
+                    PfScene.Load("GameScene");
+                }
             });
 	    }
 

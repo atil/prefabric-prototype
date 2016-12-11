@@ -28,9 +28,9 @@ namespace Prefabric
     /// </summary>
     public class MapManager
     {
-        private List<AgentBase> _agents = new List<AgentBase>();
-        private PlayerAgent _player;
-        private List<Tile> _tiles;
+        private readonly List<AgentBase> _agents;
+        private readonly PlayerAgent _player;
+        private readonly List<Tile> _tiles;
         private readonly LevelLoader _levelLoader = new LevelLoader();
         
         private Tile _hoverTile;
@@ -38,12 +38,12 @@ namespace Prefabric
         private readonly Stack<Tuple<Tile, Tile>> _bendHistory = new Stack<Tuple<Tile, Tile>>();
         private int _currentTweenerCount;
 
-        private void Init(List<Tile> tiles, List<AgentBase> agents)
+        public MapManager(string lvlName, List<AgentBase> agents)
         {
             _agents = agents;
             _player = _agents.Find(x => x is PlayerAgent) as PlayerAgent;
 
-            _tiles = tiles;
+            _tiles = _levelLoader.LoadLevelAt("Levels/" + lvlName);
 
             var startTile = _tiles.Find(x => x is StartTile);
             _player.Position = startTile.Position + Vector3.up * 1.5f;
@@ -52,17 +52,6 @@ namespace Prefabric
             MessageBus.OnEvent<TileHoverCommand>().Subscribe(ev => OnTileHover(ev.Tile));
             MessageBus.OnEvent<UnbendCommand>().Subscribe(ev => Unbend());
             MessageBus.OnEvent<TileTweenCompletedEvent>().Subscribe(ev => OnTileCompletedTween(ev.Tile));
-
-        }
-
-        public MapManager(string lvlPath, List<AgentBase> agents)
-        {
-            Init(_levelLoader.LoadLevelAt(lvlPath), agents);
-        }
-
-        public MapManager(int lvlNum, List<AgentBase> agents)
-        {
-            Init(_levelLoader.LoadLevelAt(lvlNum), agents);
         }
 
         private void OnTileHover(Tile tile)

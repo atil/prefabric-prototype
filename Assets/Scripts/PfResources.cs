@@ -39,7 +39,7 @@ namespace Prefabric
         /// Read the file of contents at the given path
         /// The file must be under a "Resources/" directory
         /// </summary>
-        /// <param name="path">File path</param>
+        /// <param name="path">File path. Extension must be excluded</param>
         /// <returns>File contents as string</returns>
         public static string LoadStringAt(string path)
         {

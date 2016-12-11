@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UniRx;
 using UnityEngine;
 
 namespace Prefabric
@@ -13,34 +14,10 @@ namespace Prefabric
     public class LevelLoader
     {
         /// <summary>
-        /// Level paths of single player mode
-        /// </summary>
-        private static List<string> _levelPaths = new List<string>();
-
-        public LevelLoader()
-        {
-            var json = JSON.Parse(PfResources.LoadStringAt("levelPaths"));
-            foreach (JSONNode pathString in json["paths"].AsArray)
-            {
-                _levelPaths.Add(pathString.Value);
-            }
-        }
-
-        /// <summary>
-        /// Load level at specific index
-        /// </summary>
-        /// <param name="lvlNum">Index in single player</param>
-        /// <returns></returns>
-        public List<Tile> LoadLevelAt(int lvlNum)
-        {
-            return ParseLevel(PfResources.LoadStringAt(_levelPaths[lvlNum]));
-        }
-
-        /// <summary>
         /// Load level at the specified path
         /// </summary>
         /// <param name="lvlPath">A file path relative to Resources</param>
-        /// <returns></returns>
+        /// <returns>A list of tiles</returns>
         public List<Tile> LoadLevelAt(string lvlPath)
         {
             return ParseLevel(PfResources.LoadStringAt(lvlPath));
@@ -98,7 +75,7 @@ namespace Prefabric
         /// </summary>
         /// <param name="tiles"></param>
         /// <param name="lvlPath"></param>
-        /// <returns></returns>
+        /// <returns>False, if path is errorneous or start/end tiles are problematic. Otherwise true</returns>
         public bool SaveLevelAt(List<Tile> tiles, string lvlPath)
         {
             if (string.IsNullOrEmpty(lvlPath))

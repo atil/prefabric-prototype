@@ -22,7 +22,7 @@ namespace Prefabric.LevelEditor
         public Action<Tile, Vector3> HoverEnter;
         public Action<Tile> HoverExit;
 
-        private const float MoveSpeed = 10f;
+        private const float MoveSpeed = 20f;
         private const float RotSpeed = 50f;
 
         private Tile _currentHoverTile;
@@ -33,7 +33,7 @@ namespace Prefabric.LevelEditor
         public void Init()
         {
             _tr = transform;
-            _midScreenPoint = new Vector3(Screen.width / 2, Screen.height / 2, 0);
+            _midScreenPoint = new Vector3(Screen.width / 2f, Screen.height / 2f, 0);
             SetActive(true);
 
             MessageBus.OnEvent<EditorSaveLevelEvent>().Subscribe(x =>
