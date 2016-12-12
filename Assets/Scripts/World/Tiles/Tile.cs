@@ -102,6 +102,7 @@ namespace Prefabric
         {
             Transform = transform;
             Id = id;
+            _id = id.ToString();
             _material = GetComponent<Renderer>().material;
             _normalColor = _material.color;
             VisualState = TileVisualState.Normal;

@@ -20,6 +20,8 @@ namespace Prefabric
         /// <returns>A list of tiles</returns>
         public List<Tile> LoadLevelAt(string lvlPath)
         {
+            //var lvl = ParseLevel(PfResources.LoadStringAt(lvlPath));
+            //Debug.Log("Loaded level from [" + lvlPath + "] tile count : " + lvl.Count);
             return ParseLevel(PfResources.LoadStringAt(lvlPath));
         }
 
@@ -38,6 +40,7 @@ namespace Prefabric
 
             var lvlJson = JSON.Parse(lvlStr);
             var tiles = new List<Tile>();
+
             foreach (JSONClass tileEntry in lvlJson["tiles"].AsArray)
             {
                 var tileId = tileEntry["id"].Value;
@@ -119,6 +122,8 @@ namespace Prefabric
             lvlJson["endTile"]["z"].AsInt = Mathf.FloorToInt(endTile.Position.z);
 
             System.IO.File.WriteAllText(lvlPath, lvlJson.ToString());
+
+            Debug.Log("Level written to : [" + lvlPath + "] Tile count: " + tiles.Count);
 
             return true;
         }

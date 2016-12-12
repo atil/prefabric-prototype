@@ -17,8 +17,13 @@ namespace Prefabric.LevelEditor
         public string Path { get; set; }
     }
 
+    public class EditorTestLevelEvent : PfEvent
+    {
+    }
+
     public class EditorMenu : MonoBehaviour
     {
+        public Button TestLevelButton;
         public Button LoadButton;
         public Button SaveButton;
 
@@ -42,6 +47,11 @@ namespace Prefabric.LevelEditor
                 path = path.Replace(Application.dataPath + "/Resources/", ""); // Make the path relative to Resources
 
                 MessageBus.Publish(new EditorLoadLevelEvent() { Path = path });
+            });
+
+            TestLevelButton.onClick.AddListener(() =>
+            {
+                MessageBus.Publish(new EditorTestLevelEvent());
             });
 
         }

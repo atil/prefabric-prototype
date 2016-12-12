@@ -55,6 +55,18 @@ namespace Prefabric.LevelEditor
             {
                 _curResource = ev.SelectedTileResource;
             });
+
+            MessageBus.OnEvent<EditorTestLevelEvent>().Subscribe(ev =>
+            {
+                GameSceneArgs.Write("testLevel");
+                var lvlPath = Application.dataPath + "/Resources/Levels/testLevel.json";
+                _levelLoader.SaveLevelAt(_tiles, lvlPath);
+
+                Observable.Timer(TimeSpan.FromSeconds(2f)).Subscribe(x =>
+                {
+                    PfScene.Load("GameScene");
+                });
+            });
         }
 
         void Update()

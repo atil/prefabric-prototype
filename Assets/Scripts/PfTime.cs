@@ -25,6 +25,17 @@ namespace Prefabric
 
         void Awake()
         {
+            // If there are other PfTime's other than "this", delete yourself
+            // Could use a SingletonBehaviour here
+            var pftimes = FindObjectsOfType<PfTime>();
+            foreach (var pftime in pftimes)
+            {
+                if (pftime != this)
+                {
+                    Destroy(gameObject);
+                }
+            }
+
             TimeScale = 1f;
             DontDestroyOnLoad(gameObject);
         }
