@@ -25,7 +25,7 @@ namespace Prefabric.LevelEditor
             _ui.Init();
 
             _levelLoader = new LevelLoader();
-            _tiles = _levelLoader.LoadLevelAt("Levels/testLevel");
+            _tiles = _levelLoader.LoadLevelAt("Levels/testLevel.json");
 
             _camera.HoverEnter += OnCameraHoverEnter;
             _camera.HoverExit += OnCameraHoverExit;
@@ -58,7 +58,7 @@ namespace Prefabric.LevelEditor
 
             MessageBus.OnEvent<EditorTestLevelEvent>().Subscribe(ev =>
             {
-                GameSceneArgs.Write("testLevel");
+                GameSceneArgs.Write("testLevel.json");
                 var lvlPath = Application.dataPath + "/Resources/Levels/testLevel.json";
                 _levelLoader.SaveLevelAt(_tiles, lvlPath);
 

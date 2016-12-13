@@ -14,7 +14,7 @@ namespace Prefabric
         static LevelPaths()
         {
             var tmpList = new List<string>();
-            var json = JSON.Parse(PfResources.LoadStringAt("levelPaths"));
+            var json = JSON.Parse(PfResources.LoadStringAt("levelPaths.json"));
             foreach (JSONNode pathString in json["paths"].AsArray)
             {
                 tmpList.Add(pathString.Value);

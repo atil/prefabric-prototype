@@ -15,16 +15,16 @@ namespace Prefabric
 
         public static GameSceneArgs Load()
         {
-            var gameSceneArgsJson = JSON.Parse(PfResources.LoadStringAt("gameSceneArgs"));
+            var gameSceneArgsJson = JSON.Parse(PfResources.LoadStringAt("gameSceneArgs.json"));
             return new GameSceneArgs()
             {
-                LevelName = gameSceneArgsJson["levelName"].Value
+                LevelName = gameSceneArgsJson["levelName"].Value + ".json"
             };
         }
 
         public static void Write(string lvlName)
         {
-            var gameSceneArgsJson = JSON.Parse(PfResources.LoadStringAt("gameSceneArgs"));
+            var gameSceneArgsJson = JSON.Parse(PfResources.LoadStringAt("gameSceneArgs.json"));
             gameSceneArgsJson["levelPath"] = lvlName;
             System.IO.File.WriteAllText(Application.dataPath + "/Resources/gameSceneArgs.json", gameSceneArgsJson.ToString());
         }

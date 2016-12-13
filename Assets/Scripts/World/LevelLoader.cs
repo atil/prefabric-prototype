@@ -20,9 +20,9 @@ namespace Prefabric
         /// <returns>A list of tiles</returns>
         public List<Tile> LoadLevelAt(string lvlPath)
         {
-            //var lvl = ParseLevel(PfResources.LoadStringAt(lvlPath));
-            //Debug.Log("Loaded level from [" + lvlPath + "] tile count : " + lvl.Count);
-            return ParseLevel(PfResources.LoadStringAt(lvlPath));
+            var lvl = ParseLevel(PfResources.LoadStringAt(lvlPath));
+            Debug.Log("Loaded level from [" + lvlPath + "] tile count : " + lvl.Count);
+            return lvl;
         }
 
         /// <summary>
