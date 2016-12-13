@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 namespace Prefabric.LevelEditor
 {
-    public class EditorTileSelectedEvent : PfEvent
+    public class EditorTileSelectedEvent : PfSceneEvent
     {
         public PfResourceType SelectedTileResource { get; set; }
     }

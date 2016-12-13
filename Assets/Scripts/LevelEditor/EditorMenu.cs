@@ -7,17 +7,17 @@ using UnityEngine.UI;
 
 namespace Prefabric.LevelEditor
 { 
-    public class EditorSaveLevelEvent : PfEvent
+    public class EditorSaveLevelEvent : PfSceneEvent
     {
         public string Path { get; set; }
     }
 
-    public class EditorLoadLevelEvent : PfEvent
+    public class EditorLoadLevelEvent : PfSceneEvent
     {
         public string Path { get; set; }
     }
 
-    public class EditorTestLevelEvent : PfEvent
+    public class EditorTestLevelEvent : PfSceneEvent
     {
     }
 
