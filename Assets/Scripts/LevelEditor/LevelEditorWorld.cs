@@ -58,14 +58,11 @@ namespace Prefabric.LevelEditor
 
             MessageBus.OnEvent<EditorTestLevelEvent>().Subscribe(ev =>
             {
-                GameSceneArgs.Write("testLevel.json");
+                GameSceneArgs.Write("testLevel.json", true);
                 var lvlPath = Application.dataPath + "/Resources/Levels/testLevel.json";
                 _levelLoader.SaveLevelAt(_tiles, lvlPath);
 
-                Observable.Timer(TimeSpan.FromSeconds(2f)).Subscribe(x =>
-                {
-                    PfScene.Load("GameScene");
-                });
+                PfScene.Load("GameScene");
             });
         }
 

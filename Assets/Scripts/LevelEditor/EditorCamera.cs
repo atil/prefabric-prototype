@@ -8,7 +8,7 @@ using UnityEngine.EventSystems;
 
 namespace Prefabric.LevelEditor
 {
-    public class EditorCameraStateChangedEvent : PfEvent
+    public class EditorCameraStateChangedEvent : PfSceneEvent
     {
         public bool IsActive { get; set; }
     }

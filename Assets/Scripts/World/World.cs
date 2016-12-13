@@ -33,6 +33,13 @@ namespace Prefabric
 
             MessageBus.OnEvent<EndZoneTriggeredEvent>().Subscribe(x =>
             {
+                if (args.IsEditMode) // Passing level in editor scene
+                {
+                    // Load the same level with the same args
+                    PfScene.Load("GameScene");
+                    return;
+                }
+
                 // Advance level
                 var curLevelIndex = LevelPaths.Paths.IndexOf(args.LevelName);
                 if (++curLevelIndex >= LevelPaths.Paths.Count)
@@ -41,10 +48,18 @@ namespace Prefabric
                 }
                 else
                 {
-                    GameSceneArgs.Write(LevelPaths.Paths[curLevelIndex]);
+                    GameSceneArgs.Write(LevelPaths.Paths[curLevelIndex], false);
                     PfScene.Load("GameScene");
                 }
             });
+
+	        MessageBus.OnEvent<MenuToggleCommand>().Subscribe(ev =>
+	        {
+	            if (args.IsEditMode)
+	            {
+	                PfScene.Load("LevelEditorScene");
+	            }
+	        });
 	    }
 
         void Update()

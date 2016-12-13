@@ -77,6 +77,12 @@ namespace Prefabric
 
             // Camera zoom
             MessageBus.Publish(new CameraZoomCommand() { Amount = Input.GetAxis("Mouse ScrollWheel") });
+
+            // Menu toggle
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                MessageBus.Publish(new MenuToggleCommand());
+            }
         }
     }
 }

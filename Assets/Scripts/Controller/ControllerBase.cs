@@ -40,6 +40,8 @@ namespace Prefabric
 
     public class UnbendCommand : PfCommand { }
 
+    public class MenuToggleCommand : PfCommand { }
+
     /// <summary>
     /// Controllers are command emitters.
     /// These input commands can come from keyboard - mouse,
