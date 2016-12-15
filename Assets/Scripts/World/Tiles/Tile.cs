@@ -21,10 +21,16 @@ namespace Prefabric
         Selected,
     }
 
-    public class TileState
+    public struct TileState
     {
-        public Vector3 Position { get; set; }
-        public bool IsBent { get; set; } // Might not be needed
+        public Vector3 Position { get; private set; }
+        public bool IsBent { get; private set; }
+
+        public TileState(Vector3 pos, bool isBent) : this()
+        {
+            Position = pos;
+            IsBent = isBent;
+        }
     }
 
     public class Tile : MonoBehaviour
@@ -42,6 +48,9 @@ namespace Prefabric
 
             return Mathf.Approximately(result.sqrMagnitude, 1f);
         }
+
+        private const float BendMoveSpeed = 1.5f;
+        private const float BendFadeSpeed = 1.5f;
 
         // These are to be removed when we move onto a custom shader
         // (which we'll do eventually)
@@ -94,6 +103,7 @@ namespace Prefabric
         // For now, I think going for shared material optimization is not needed
         // We won't have thousands of cubes, like we do in Fabric
         private Material _material;
+        private BoxCollider _collider;
 
         private readonly Stack<TileState> _history = new Stack<TileState>();
         private Vector3 _initialPosition;
@@ -107,6 +117,7 @@ namespace Prefabric
             _normalColor = _material.color;
             VisualState = TileVisualState.Normal;
             _initialPosition = Position;
+            _collider = GetComponent<BoxCollider>();
         }
 
         public void ExternalUpdate()
@@ -115,11 +126,13 @@ namespace Prefabric
 
         private IEnumerator TweenCoroutine(Vector3 targetPosition)
         {
-            while (Vector3.Distance(targetPosition, Position) > 0.1)
+            var startPosition = Position;
+            for (var f = 0f; f < 1f; f += PfTime.DeltaTime * BendMoveSpeed)
             {
-                Position = Vector3.Lerp(Position, targetPosition, PfTime.DeltaTime * 5);
+                Position = Vector3.Lerp(startPosition, targetPosition, Curve.Instance.TileTween.Evaluate(f));
                 yield return null;
             }
+
             Position = targetPosition;
 
             MessageBus.Publish(new TileTweenCompletedEvent() {Tile = this});
@@ -127,7 +140,30 @@ namespace Prefabric
 
         public void Bend(TileState nextState)
         {
+            var initiallyActive = _history.Count == 0 || !_history.Peek().IsBent;
             _history.Push(nextState);
+
+            var activeAfterBend = !nextState.IsBent;
+            if (initiallyActive && !activeAfterBend)
+            {
+                // Fade out
+                var f = 1f;
+                IDisposable fadeoutDisposable = null;
+                fadeoutDisposable = Observable.EveryUpdate().Subscribe(x =>
+                {
+                    _material.SetAlpha(Curve.Instance.TileTween.Evaluate(f));
+                    f -= PfTime.DeltaTime * BendFadeSpeed;
+
+                    if (f < 0.001)
+                    {
+                        _material.SetAlpha(0f);
+                        fadeoutDisposable.Dispose();
+                    }
+                });
+
+                _collider.enabled = false;
+            }
+
             CoroutineStarter.StartCoroutine(TweenCoroutine(nextState.Position));
         }
 
@@ -138,9 +174,44 @@ namespace Prefabric
                 return;
             }
 
+            var initiallyActive = !_history.Peek().IsBent;
             _history.Pop();
 
-            var targetPosition = _history.Count == 0 ? _initialPosition : _history.Peek().Position;
+            Vector3 targetPosition;
+            bool activeAfterBend;
+            if (_history.Count != 0)
+            {
+                var targetState = _history.Peek();
+                targetPosition = targetState.Position;
+                activeAfterBend = !targetState.IsBent;
+            }
+            else // Empty history, return to initial state
+            {
+                targetPosition = _initialPosition;
+                activeAfterBend = true;
+            }
+
+            if (!initiallyActive && activeAfterBend)
+            {
+                // Fade in
+                var f = 1f;
+                IDisposable fadeoutDisposable = null;
+                fadeoutDisposable = Observable.EveryUpdate().Subscribe(x =>
+                {
+                    _material.SetAlpha(Curve.Instance.TileTween.Evaluate(f));
+                    f += PfTime.DeltaTime * BendFadeSpeed;
+
+                    if (f > 0.999)
+                    {
+                        _material.SetAlpha(1f);
+                        fadeoutDisposable.Dispose();
+                    }
+                });
+
+                _collider.enabled = true;
+
+            }
+
             CoroutineStarter.StartCoroutine(TweenCoroutine(targetPosition));
         }
 

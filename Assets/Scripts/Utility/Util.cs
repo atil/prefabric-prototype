@@ -41,5 +41,12 @@ namespace Prefabric
                             select assemblyType).ToArray();
 
         }
+
+        public static void SetAlpha(this Material m, float a)
+        {
+            var c = m.color;
+            c.a = a;
+            m.color = c;
+        }
     }
 }

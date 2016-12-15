@@ -172,16 +172,12 @@ namespace Prefabric
 
                     targetPos = tile.Position 
                         + flyAwayDir 
-                            * Random.Range(50f, 150f) // Should go out of screen
+                            * Random.Range(5f, 15f) // Should go out of screen
                             * Mathf.Sign(Random.Range(-1f, 1f)); // Randomly, up or down
                     isBent = true;
                 }
 
-                tile.Bend(new TileState()
-                {
-                    Position = targetPos,
-                    IsBent = isBent
-                });
+                tile.Bend(new TileState(targetPos, isBent));
                 _currentTweenerCount++;
             }
 
