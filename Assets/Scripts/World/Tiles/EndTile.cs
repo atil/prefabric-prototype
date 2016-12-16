@@ -33,5 +33,24 @@ namespace Prefabric
             }
 
         }
+
+        protected override void FadeIn()
+        {
+            base.FadeIn();
+            foreach (Transform t in Transform)
+            {
+                t.gameObject.SetActive(true);
+            }
+        }
+
+        protected override void FadeOut()
+        {
+            base.FadeOut();
+            foreach (Transform t in Transform)
+            {
+                t.gameObject.SetActive(false);
+            }
+
+        }
     }
 }

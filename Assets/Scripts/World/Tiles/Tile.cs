@@ -135,7 +135,7 @@ namespace Prefabric
 
             Position = targetPosition;
 
-            MessageBus.Publish(new TileTweenCompletedEvent() {Tile = this});
+            MessageBus.Publish(new TileTweenCompletedEvent() { Tile = this });
         }
 
         public void Bend(TileState nextState)
@@ -146,22 +146,7 @@ namespace Prefabric
             var activeAfterBend = !nextState.IsBent;
             if (initiallyActive && !activeAfterBend)
             {
-                // Fade out
-                var f = 1f;
-                IDisposable fadeoutDisposable = null;
-                fadeoutDisposable = Observable.EveryUpdate().Subscribe(x =>
-                {
-                    _material.SetAlpha(Curve.Instance.TileTween.Evaluate(f));
-                    f -= PfTime.DeltaTime * BendFadeSpeed;
-
-                    if (f < 0.001)
-                    {
-                        _material.SetAlpha(0f);
-                        fadeoutDisposable.Dispose();
-                    }
-                });
-
-                _collider.enabled = false;
+                FadeOut();
             }
 
             CoroutineStarter.StartCoroutine(TweenCoroutine(nextState.Position));
@@ -193,28 +178,49 @@ namespace Prefabric
 
             if (!initiallyActive && activeAfterBend)
             {
-                // Fade in
-                var f = 1f;
-                IDisposable fadeoutDisposable = null;
-                fadeoutDisposable = Observable.EveryUpdate().Subscribe(x =>
-                {
-                    _material.SetAlpha(Curve.Instance.TileTween.Evaluate(f));
-                    f += PfTime.DeltaTime * BendFadeSpeed;
-
-                    if (f > 0.999)
-                    {
-                        _material.SetAlpha(1f);
-                        fadeoutDisposable.Dispose();
-                    }
-                });
-
-                _collider.enabled = true;
-
+                FadeIn();
             }
 
             CoroutineStarter.StartCoroutine(TweenCoroutine(targetPosition));
         }
 
-        
+        protected virtual void FadeOut()
+        {
+            var f = 1f;
+            IDisposable fadeoutDisposable = null;
+            fadeoutDisposable = Observable.EveryUpdate().Subscribe(x =>
+            {
+                _material.SetAlpha(Curve.Instance.TileTween.Evaluate(f));
+                f -= PfTime.DeltaTime * BendFadeSpeed;
+
+                if (f < 0.001)
+                {
+                    _material.SetAlpha(0f);
+                    fadeoutDisposable.Dispose();
+                }
+            });
+
+            _collider.enabled = false;
+        }
+
+        protected virtual void FadeIn()
+        {
+            var f = 1f;
+            IDisposable fadeoutDisposable = null;
+            fadeoutDisposable = Observable.EveryUpdate().Subscribe(x =>
+            {
+                _material.SetAlpha(Curve.Instance.TileTween.Evaluate(f));
+                f += PfTime.DeltaTime * BendFadeSpeed;
+
+                if (f > 0.999)
+                {
+                    _material.SetAlpha(1f);
+                    fadeoutDisposable.Dispose();
+                }
+            });
+
+            _collider.enabled = true;
+
+        }
     }
 }
