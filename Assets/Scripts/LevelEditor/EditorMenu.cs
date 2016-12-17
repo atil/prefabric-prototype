@@ -27,15 +27,14 @@ namespace Prefabric.LevelEditor
         public Button LoadButton;
         public Button SaveButton;
 
+        public EditorSavePanel SavePanel;
+
         void Start()
         {
             SaveButton.onClick.AddListener(() =>
             {
-                // Temporarily bound to UnityEditor
-                var path = UnityEditor.EditorUtility
-                    .SaveFilePanel("Save Level", "Assets/Resources/Levels", "UntitledLevel", "json");
-
-                MessageBus.Publish(new EditorSaveLevelEvent() { Path = path });
+                SavePanel.SetActive(true);
+                SetState(false);
             });
 
             LoadButton.onClick.AddListener(() =>
@@ -54,6 +53,7 @@ namespace Prefabric.LevelEditor
                 MessageBus.Publish(new EditorTestLevelEvent());
             });
 
+            SavePanel.Init();
         }
 
         public void Toggle()

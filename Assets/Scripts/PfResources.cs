@@ -13,6 +13,7 @@ namespace Prefabric
         EndTile,
         EndZone,
         EditorTileButton,
+        EditorFileButton,
     }
 
     /// <summary>
@@ -33,6 +34,7 @@ namespace Prefabric
             ResourcePaths.Add(PfResourceType.EndTile, "Prefabs/Tiles/EndTile");
             ResourcePaths.Add(PfResourceType.EndZone, "Prefabs/Tiles/EndZone");
             ResourcePaths.Add(PfResourceType.EditorTileButton, "LevelEditor/Prefabs/TileButton");
+            ResourcePaths.Add(PfResourceType.EditorFileButton, "LevelEditor/Prefabs/FileButton");
         }
 
         /// <summary>
