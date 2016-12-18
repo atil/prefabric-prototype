@@ -5,15 +5,14 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
-using Random = UnityEngine.Random;
 
 namespace Prefabric.LevelEditor
 {
-    public class EditorSavePanel : MonoBehaviour
+    public class EditorLoadPanel : MonoBehaviour
     {
-        public Button SaveButton;
-        public InputField LevelNameField;
+        public Button LoadButton;
         public Transform ButtonsParent;
+        public Text LevelNameText;
 
         private readonly List<GameObject> _buttons = new List<GameObject>();
         private GameObject _fileButtonPrefab;
@@ -24,19 +23,12 @@ namespace Prefabric.LevelEditor
             _levelsPath = Application.dataPath + "/Resources/Levels/"; // This'll change with build
             _fileButtonPrefab = PfResources.Load<GameObject>(PfResourceType.EditorFileButton);
 
-            SaveButton.onClick.AddListener(() =>
+            LoadButton.onClick.AddListener(() =>
             {
-                var lvlPath = _levelsPath + LevelNameField.text + ".json";
-
-                if (File.Exists(lvlPath))
-                {
-                    // TODO: "Are you sure" check?
-                }
-
-                if (!string.IsNullOrEmpty(LevelNameField.text))
+                if (!string.IsNullOrEmpty(LevelNameText.text) && File.Exists(_levelsPath + LevelNameText.text + ".json"))
                 {
                     SetActive(false);
-                    MessageBus.Publish(new EditorSaveLevelEvent() {Path = lvlPath });
+                    MessageBus.Publish(new EditorLoadLevelEvent() {Path = "Levels/" + LevelNameText.text + ".json" });
                 }
             });
         }
@@ -47,19 +39,18 @@ namespace Prefabric.LevelEditor
             {
                 Destroy(button.gameObject);
             }
-            _buttons.Clear();
-
             if (isActive)
             {
                 foreach (var file in Directory.GetFiles(_levelsPath).Where(f => f.EndsWith("json")))
                 {
                     var button = Instantiate(_fileButtonPrefab);
-                    button.GetComponentInChildren<Text>().text = 
+                    button.GetComponentInChildren<Text>().text =
                         Path.GetFileNameWithoutExtension(file.Split('\\').Last()); // Show only file name
+
 
                     button.GetComponent<Button>().onClick.AddListener(() =>
                     {
-                        LevelNameField.text = button.GetComponentInChildren<Text>().text;
+                        LevelNameText.text = button.GetComponentInChildren<Text>().text;
                     });
 
                     button.transform.SetParent(ButtonsParent);

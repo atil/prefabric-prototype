@@ -9,17 +9,21 @@ namespace Prefabric.LevelEditor
 { 
     public class EditorSaveLevelEvent : PfSceneEvent
     {
+        /// <summary>
+        /// Relative to Resources/
+        /// </summary>
         public string Path { get; set; }
     }
 
     public class EditorLoadLevelEvent : PfSceneEvent
     {
+        /// <summary>
+        /// Relative to Resources/
+        /// </summary>
         public string Path { get; set; }
     }
 
-    public class EditorTestLevelEvent : PfSceneEvent
-    {
-    }
+    public class EditorTestLevelEvent : PfSceneEvent { }
 
     public class EditorMenu : MonoBehaviour
     {
@@ -28,6 +32,7 @@ namespace Prefabric.LevelEditor
         public Button SaveButton;
 
         public EditorSavePanel SavePanel;
+        public EditorLoadPanel LoadPanel;
 
         void Start()
         {
@@ -39,13 +44,16 @@ namespace Prefabric.LevelEditor
 
             LoadButton.onClick.AddListener(() =>
             {
-                var path = UnityEditor.EditorUtility
-                    .OpenFilePanel("Load Level", Application.dataPath + "/Resources/Levels/", "json");
+                //var path = UnityEditor.EditorUtility
+                //    .OpenFilePanel("Load Level", Application.dataPath + "/Resources/Levels/", "json");
 
-                path = path.Split('.')[0]; // Crop extension
-                path = path.Replace(Application.dataPath + "/Resources/", ""); // Make the path relative to Resources
+                //path = path.Split('.')[0]; // Crop extension
+                //path = path.Replace(Application.dataPath + "/Resources/", ""); // Make the path relative to Resources
 
-                MessageBus.Publish(new EditorLoadLevelEvent() { Path = path });
+                //MessageBus.Publish(new EditorLoadLevelEvent() { Path = path });
+
+                LoadPanel.SetActive(true);
+                SetState(false);
             });
 
             TestLevelButton.onClick.AddListener(() =>
@@ -54,6 +62,7 @@ namespace Prefabric.LevelEditor
             });
 
             SavePanel.Init();
+            LoadPanel.Init();
         }
 
         public void Toggle()
