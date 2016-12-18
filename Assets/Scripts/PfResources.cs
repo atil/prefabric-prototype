@@ -39,13 +39,12 @@ namespace Prefabric
 
         /// <summary>
         /// Read the file of contents at the given path
-        /// The file must be under a "Resources/" directory
         /// </summary>
         /// <param name="path">File path</param>
         /// <returns>File contents as string</returns>
         public static string LoadStringAt(string path)
         {
-            path = Application.dataPath + "/Resources/" + path;
+            path = Application.dataPath + "/" + path;
             if (!System.IO.File.Exists(path))
             {
                 Debug.LogError("File doesn't exist : " + path);

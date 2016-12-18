@@ -25,7 +25,7 @@ namespace Prefabric.LevelEditor
             _ui.Init();
 
             _levelLoader = new LevelLoader();
-            _tiles = _levelLoader.LoadLevelAt("Levels/testLevel.json");
+            _tiles = _levelLoader.LoadLevelAt("testLevel.json");
 
             _camera.HoverEnter += OnCameraHoverEnter;
             _camera.HoverExit += OnCameraHoverExit;

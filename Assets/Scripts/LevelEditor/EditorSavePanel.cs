@@ -21,7 +21,7 @@ namespace Prefabric.LevelEditor
 
         public void Init()
         {
-            _levelsPath = Application.dataPath + "/Resources/Levels/"; // This'll change with build
+            _levelsPath = Application.dataPath + "/Levels/"; // This'll change with build
             _fileButtonPrefab = PfResources.Load<GameObject>(PfResourceType.EditorFileButton);
 
             SaveButton.onClick.AddListener(() =>

@@ -20,15 +20,15 @@ namespace Prefabric.LevelEditor
 
         public void Init()
         {
-            _levelsPath = Application.dataPath + "/Resources/Levels/"; // This'll change with build
+            _levelsPath = Application.dataPath + "/Levels/";
             _fileButtonPrefab = PfResources.Load<GameObject>(PfResourceType.EditorFileButton);
 
             LoadButton.onClick.AddListener(() =>
             {
-                if (!string.IsNullOrEmpty(LevelNameText.text) && File.Exists(_levelsPath + LevelNameText.text + ".json"))
+                if (!string.IsNullOrEmpty(LevelNameText.text))
                 {
                     SetActive(false);
-                    MessageBus.Publish(new EditorLoadLevelEvent() {Path = "Levels/" + LevelNameText.text + ".json" });
+                    MessageBus.Publish(new EditorLoadLevelEvent() {Path = LevelNameText.text + ".json" });
                 }
             });
         }
