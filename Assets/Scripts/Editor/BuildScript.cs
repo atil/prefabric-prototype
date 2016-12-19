@@ -14,7 +14,7 @@ namespace Prefabric
         [MenuItem("Prefabric/Build Level Editor", false, 11)]
         public static void BuildStandalone()
         {
-            const string buildName = "Prefabric";
+            const string buildName = "PrefabEd";
             var buildPath = EditorUtility.SaveFolderPanel("Choose Location ", "C:/asd/build/", buildName);
             var buildDataPath = buildPath + "/" + buildName + "_Data/";
 
@@ -29,7 +29,7 @@ namespace Prefabric
                 "Assets/Scenes/GameScene.unity",
             };
 
-            var ops = BuildOptions.Development | BuildOptions.AllowDebugging;
+            const BuildOptions ops = BuildOptions.Development | BuildOptions.AllowDebugging;
             BuildPipeline.BuildPlayer(levels, buildPath + "/" + buildName + ".exe", BuildTarget.StandaloneWindows, ops);
 
             // Copy gameSceneArgs file

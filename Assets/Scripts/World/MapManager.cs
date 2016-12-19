@@ -43,7 +43,7 @@ namespace Prefabric
             _agents = agents;
             _player = _agents.Find(x => x is PlayerAgent) as PlayerAgent;
 
-            _tiles = _levelLoader.LoadLevelAt("Levels/" + lvlName);
+            _tiles = _levelLoader.LoadLevelAt(lvlName);
 
             var startTile = _tiles.Find(x => x is StartTile);
             _player.Position = startTile.Position + Vector3.up * 1.5f;
