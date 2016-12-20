@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using UniRx;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using SimpleJSON;
 using UnityEngine.SceneManagement;
 
 namespace Prefabric
@@ -22,9 +24,19 @@ namespace Prefabric
         private MapManager _mapManager;
         private PlayerAgent _player;
 
+        private ReadOnlyCollection<string> _levelPaths;
+
 	    void Start()
 	    {
 	        var args = GameSceneArgs.Load();
+
+            var tmpList = new List<string>();
+            var json = JSON.Parse(PfResources.LoadStringAt("levelPaths.json"));
+            foreach (JSONNode pathString in json["paths"].AsArray)
+            {
+                tmpList.Add(pathString.Value);
+            }
+            _levelPaths = new ReadOnlyCollection<string>(tmpList);
 
             _keyboardMouseController = new KeyboardMouseController();
             _player = new PlayerAgent(_playerTransform, _camTransform);
@@ -41,14 +53,14 @@ namespace Prefabric
                 }
 
                 // Advance level
-                var curLevelIndex = LevelPaths.Paths.IndexOf(args.LevelName);
-                if (++curLevelIndex >= LevelPaths.Paths.Count)
+                var curLevelIndex = _levelPaths.IndexOf(args.LevelName);
+                if (++curLevelIndex >= _levelPaths.Count)
                 {
                     // TODO: All levels done, endgame
                 }
                 else
                 {
-                    GameSceneArgs.Write(LevelPaths.Paths[curLevelIndex], false);
+                    GameSceneArgs.Write(_levelPaths[curLevelIndex], false);
                     PfScene.Load("GameScene");
                 }
             });
