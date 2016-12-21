@@ -11,6 +11,7 @@ namespace Prefabric
         LevelPathsFile,
         WhiteTile,
         GreyTile,
+        BlackTile,
         StartTile,
         EndTile,
         EndZone,
@@ -33,6 +34,7 @@ namespace Prefabric
         {
             ResourcePaths.Add(PfResourceType.WhiteTile, "Prefabs/Tiles/WhiteTile");
             ResourcePaths.Add(PfResourceType.GreyTile, "Prefabs/Tiles/GreyTile");
+            ResourcePaths.Add(PfResourceType.BlackTile, "Prefabs/Tiles/BlackTile");
             ResourcePaths.Add(PfResourceType.StartTile, "Prefabs/Tiles/StartTile");
             ResourcePaths.Add(PfResourceType.EndTile, "Prefabs/Tiles/EndTile");
             ResourcePaths.Add(PfResourceType.EndZone, "Prefabs/Tiles/EndZone");

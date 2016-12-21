@@ -27,6 +27,7 @@ namespace Prefabric.LevelEditor
             {
                 PfResourceType.WhiteTile,
                 PfResourceType.GreyTile,
+                PfResourceType.BlackTile,
                 PfResourceType.StartTile,
                 PfResourceType.EndTile,
             });

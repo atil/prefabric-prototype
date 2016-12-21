@@ -141,7 +141,8 @@ namespace Prefabric
             // Player shouldn't stand in between bending tiles
             // (That's gonna be a thing to explain, speaking from experience)
             var playerProj = Vector3.Dot(_player.Position, alignedDir);
-            if (playerProj > proj1 && playerProj < proj2)
+            if (playerProj > proj1 && playerProj < proj2
+                || playerProj > proj2 && playerProj < proj1)
             {
                 MessageBus.Publish(new BendFailEvent()
                 {
@@ -150,6 +151,24 @@ namespace Prefabric
                 });
 
                 return;
+            }
+
+
+            // If there's any black tile in between, fail bend.
+            foreach (var blackTile in _tiles.Where(t => t is BlackTile))
+            {
+                var blackTileProj = Vector3.Dot(blackTile.Position, alignedDir);
+                if (blackTileProj > proj1 && blackTileProj < proj2
+                    || blackTileProj > proj2 && blackTileProj < proj1)
+                {
+                    MessageBus.Publish(new BendFailEvent()
+                    {
+                        Bender1 = tile1,
+                        Bender2 = tile2,
+                    });
+
+                    return;
+                }
             }
 
             // The distance which the tiles are going to be displaced
