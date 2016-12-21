@@ -26,6 +26,7 @@ namespace Prefabric.LevelEditor
             EditorTileSelector.LoadTileButtons(new[]
             {
                 PfResourceType.WhiteTile,
+                PfResourceType.GreyTile,
                 PfResourceType.StartTile,
                 PfResourceType.EndTile,
             });

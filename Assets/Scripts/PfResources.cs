@@ -7,8 +7,10 @@ namespace Prefabric
 {
     public enum PfResourceType
     {
+        None,
         LevelPathsFile,
         WhiteTile,
+        GreyTile,
         StartTile,
         EndTile,
         EndZone,
@@ -30,6 +32,7 @@ namespace Prefabric
 		static PfResources()
         {
             ResourcePaths.Add(PfResourceType.WhiteTile, "Prefabs/Tiles/WhiteTile");
+            ResourcePaths.Add(PfResourceType.GreyTile, "Prefabs/Tiles/GreyTile");
             ResourcePaths.Add(PfResourceType.StartTile, "Prefabs/Tiles/StartTile");
             ResourcePaths.Add(PfResourceType.EndTile, "Prefabs/Tiles/EndTile");
             ResourcePaths.Add(PfResourceType.EndZone, "Prefabs/Tiles/EndZone");

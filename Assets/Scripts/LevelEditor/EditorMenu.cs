@@ -41,14 +41,6 @@ namespace Prefabric.LevelEditor
 
             LoadButton.onClick.AddListener(() =>
             {
-                //var path = UnityEditor.EditorUtility
-                //    .OpenFilePanel("Load Level", Application.dataPath + "/Resources/Levels/", "json");
-
-                //path = path.Split('.')[0]; // Crop extension
-                //path = path.Replace(Application.dataPath + "/Resources/", ""); // Make the path relative to Resources
-
-                //MessageBus.Publish(new EditorLoadLevelEvent() { Path = path });
-
                 LoadPanel.SetActive(true);
                 SetState(false);
             });

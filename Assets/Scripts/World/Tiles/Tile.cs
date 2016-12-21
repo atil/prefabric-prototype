@@ -69,6 +69,8 @@ namespace Prefabric
         public Transform Transform { get; private set; }
         public Vector3 Position { get { return Transform.position; } set { Transform.position = value; } }
 
+        public virtual bool IsInteractable { get { return true; } }
+
         public bool IsBent
         {
             get { return _history.Count > 0 && _history.Peek().IsBent; }
@@ -108,11 +110,14 @@ namespace Prefabric
         private readonly Stack<TileState> _history = new Stack<TileState>();
         private Vector3 _initialPosition;
 
-        public virtual void Init(Guid id)
+        public PfResourceType ResourceType { get; private set; }
+
+        public virtual void Init(Guid id, PfResourceType resType)
         {
             Transform = transform;
             Id = id;
             _id = id.ToString();
+            ResourceType = resType;
             _material = GetComponent<Renderer>().material;
             _normalColor = _material.color;
             VisualState = TileVisualState.Normal;

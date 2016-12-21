@@ -124,7 +124,7 @@ namespace Prefabric.LevelEditor
         {
             var tileGo = Instantiate(PfResources.Load<GameObject>(_curResource));
             var newTile = tileGo.GetComponent<Tile>();
-            newTile.Init(Guid.NewGuid());
+            newTile.Init(Guid.NewGuid(), _curResource);
             newTile.Position = position;
             _tiles.Add(newTile);
         }

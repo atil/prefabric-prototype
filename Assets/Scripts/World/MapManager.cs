@@ -68,6 +68,11 @@ namespace Prefabric
                 _hoverTile.VisualState = TileVisualState.Normal;
             }
 
+            if (!tile.IsInteractable) // Don't touch uninteractable tiles
+            {
+                return;
+            }
+
             _hoverTile = tile;
 
             if (_hoverTile.VisualState != TileVisualState.Selected) // Don't touch selected tile visuals
@@ -78,6 +83,11 @@ namespace Prefabric
 
         private void OnTileSelected(Tile tile)
         {
+            if (!tile.IsInteractable)
+            {
+                return;
+            }
+
             // No tile selected present
             if (_firstSelectedTile == null) 
             {

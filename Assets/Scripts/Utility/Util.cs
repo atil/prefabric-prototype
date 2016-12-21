@@ -27,6 +27,16 @@ namespace Prefabric
             return Vector3.ProjectOnPlane(v, Vector3.up);
         }
 
+        public static T ToEnum<T>(this string value)
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                return default(T);
+            }
+
+            return (T)Enum.Parse(typeof(T), value, true);
+        }
+
         public static FieldInfo[] GetFieldsMarkedWith<T>(object obj) where T : Attribute
         {
             return obj.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Instance)

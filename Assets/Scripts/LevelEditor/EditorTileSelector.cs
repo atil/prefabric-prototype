@@ -21,5 +21,6 @@ namespace Prefabric.LevelEditor
                 buttonGo.GetComponent<EditorTileButton>().Init(res);
             }
         }
+
     }
 }

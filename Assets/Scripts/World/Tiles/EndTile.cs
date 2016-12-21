@@ -9,9 +9,9 @@ namespace Prefabric
 {
     public class EndTile : Tile
     {
-        public override void Init(Guid id)
+        public override void Init(Guid id, PfResourceType resType)
         {
-            base.Init(id);
+            base.Init(id, resType);
 
             // No endzones in the editor
             // I should probably centralize this game / editor distinction
