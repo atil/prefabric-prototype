@@ -9,6 +9,8 @@ namespace Prefabric.LevelEditor
 {
     public class LevelEditorWorld : MonoBehaviour
     {
+        private const int ClearSize = 3;
+
         [SerializeField]
         private EditorCamera _camera;
 
@@ -64,6 +66,30 @@ namespace Prefabric.LevelEditor
 
                 PfScene.Load("GameScene");
             });
+
+            MessageBus.OnEvent<EditorClearLevelEvent>().Subscribe(ev =>
+            {
+                foreach (var tile in _tiles)
+                {
+                    Destroy(tile.gameObject);
+                }
+                _tiles.Clear();
+
+                _curResource = PfResourceType.StartTile;
+                InstantiateTile(Vector3.zero);
+
+                _curResource = PfResourceType.WhiteTile;
+                for (var i = -ClearSize; i < ClearSize; i++)
+                {
+                    for (var j = -ClearSize; j < ClearSize; j++)
+                    {
+                        if (i != 0 || j != 0)
+                        {
+                            InstantiateTile(new Vector3(i, 0, j));
+                        }
+                    }
+                }
+            });
         }
 
         void Update()
@@ -84,11 +110,7 @@ namespace Prefabric.LevelEditor
 
         private void OnCameraLeftClick(Tile hitTile, Vector3 normal)
         {
-            var tileGo = Instantiate(PfResources.Load<GameObject>(_curResource));
-            var newTile = tileGo.GetComponent<Tile>();
-            newTile.Init(Guid.NewGuid());
-            newTile.Position = hitTile.Position + normal;
-            _tiles.Add(newTile);
+            InstantiateTile(hitTile.Position + normal);
         }
 
         private void OnCameraRightClick(Tile tile, Vector3 normal)
@@ -98,5 +120,13 @@ namespace Prefabric.LevelEditor
         }
         #endregion
 
+        private void InstantiateTile(Vector3 position)
+        {
+            var tileGo = Instantiate(PfResources.Load<GameObject>(_curResource));
+            var newTile = tileGo.GetComponent<Tile>();
+            newTile.Init(Guid.NewGuid());
+            newTile.Position = position;
+            _tiles.Add(newTile);
+        }
     }
 }

@@ -9,27 +9,24 @@ namespace Prefabric.LevelEditor
 { 
     public class EditorSaveLevelEvent : PfSceneEvent
     {
-        /// <summary>
-        /// Relative to Resources/
-        /// </summary>
         public string Path { get; set; }
     }
 
     public class EditorLoadLevelEvent : PfSceneEvent
     {
-        /// <summary>
-        /// Relative to Resources/
-        /// </summary>
         public string Path { get; set; }
     }
 
     public class EditorTestLevelEvent : PfSceneEvent { }
+
+    public class EditorClearLevelEvent : PfSceneEvent { }
 
     public class EditorMenu : MonoBehaviour
     {
         public Button TestLevelButton;
         public Button LoadButton;
         public Button SaveButton;
+        public Button ClearButton;
 
         public EditorSavePanel SavePanel;
         public EditorLoadPanel LoadPanel;
@@ -59,6 +56,11 @@ namespace Prefabric.LevelEditor
             TestLevelButton.onClick.AddListener(() =>
             {
                 MessageBus.Publish(new EditorTestLevelEvent());
+            });
+
+            ClearButton.onClick.AddListener(() =>
+            {
+                MessageBus.Publish(new EditorClearLevelEvent());
             });
 
             SavePanel.Init();
