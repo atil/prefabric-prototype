@@ -12,7 +12,7 @@ namespace Prefabric
             set { Transform.position = value; }
         }
 
-        public AgentBase(Transform transform)
+        protected AgentBase(Transform transform)
         {
             Transform = transform;
             MessageBus.OnEvent<MoveCommand>().Subscribe(ev => OnMove(ev.Direction));

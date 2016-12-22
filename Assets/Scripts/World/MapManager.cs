@@ -141,8 +141,7 @@ namespace Prefabric
             // Player shouldn't stand in between bending tiles
             // (That's gonna be a thing to explain, speaking from experience)
             var playerProj = Vector3.Dot(_player.Position, alignedDir);
-            if (playerProj > proj1 && playerProj < proj2
-                || playerProj > proj2 && playerProj < proj1)
+            if (playerProj.InBetween(proj1, proj2))
             {
                 MessageBus.Publish(new BendFailEvent()
                 {
@@ -154,12 +153,11 @@ namespace Prefabric
             }
 
 
-            // If there's any black tile in between, fail bend.
+            // If there's any black tile in between, fail bend
             foreach (var blackTile in _tiles.Where(t => t is BlackTile))
             {
                 var blackTileProj = Vector3.Dot(blackTile.Position, alignedDir);
-                if (blackTileProj > proj1 && blackTileProj < proj2
-                    || blackTileProj > proj2 && blackTileProj < proj1)
+                if (blackTileProj.InBetween(proj1, proj2))
                 {
                     MessageBus.Publish(new BendFailEvent()
                     {
@@ -201,14 +199,15 @@ namespace Prefabric
 
                     targetPos = tile.Position 
                         + flyAwayDir 
-                            * Random.Range(5f, 15f) // Should go out of screen
+                            * Random.Range(5f, 15f)
                             * Mathf.Sign(Random.Range(-1f, 1f)); // Randomly, up or down
                     isBent = true;
                 }
 
                 tile.Bend(new TileState(targetPos, isBent));
-                _currentTweenerCount++;
             }
+
+            _currentTweenerCount = _tiles.Count;
 
             MessageBus.Publish(new BendEvent()
             {

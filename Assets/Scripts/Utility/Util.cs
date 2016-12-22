@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using UnityEngine;
+using ADBannerView = UnityEngine.iOS.ADBannerView;
 
 namespace Prefabric
 {
@@ -25,6 +26,11 @@ namespace Prefabric
         public static Vector3 Horizontal(this Vector3 v)
         {
             return Vector3.ProjectOnPlane(v, Vector3.up);
+        }
+
+        public static bool InBetween(this float val, float a, float b)
+        {
+            return (val < b && val > a) || (val < a && val > b);
         }
 
         public static T ToEnum<T>(this string value)
