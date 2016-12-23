@@ -182,23 +182,29 @@ namespace Prefabric
                 // dissecting the space with 2 planes
                 if (tileProj >= proj1 && tileProj >= proj2) // Upper
                 {
-                    // If this tile is behind a black tile, it will block the movement
-                    var tileHits = Physics.RaycastAll(new Ray(tile.Position, -alignedDir), moveDistance, 1 << Layer.Tile);
-                    var isBehindBlackTile = tileHits.Any(th => th.transform.GetComponent<Tile>() is BlackTile)
-                        || tile is BlackTile;
-                    var blackTileCoeff = isBehindBlackTile ? 0f : 1f;
+                    // Canceled for now
+                    //// If this tile is behind a black tile, it will block the movement
+                    //var maxProj = Mathf.Max(proj1, proj2);
+                    //var tileHits = Physics.RaycastAll(new Ray(tile.Position, -alignedDir), Mathf.Abs(tileProj - maxProj),
+                    //    1 << Layer.Tile);
+                    //var isBehindBlackTile = tileHits.Any(th => th.transform.GetComponent<Tile>() is BlackTile)
+                    //    || tile is BlackTile;
+                    //var blackTileCoeff = isBehindBlackTile ? 0f : 1f;
 
-                    targetPos = alignedDir * -1 * moveDistance * blackTileCoeff + tile.Position;
+                    targetPos = alignedDir * -1 * moveDistance + tile.Position;
                 }
                 else if (tileProj <= proj1 && tileProj <= proj2) // Lower
                 {
-                    // If this tile is behind a black tile, it will block the movement
-                    var tileHits = Physics.RaycastAll(new Ray(tile.Position, alignedDir), moveDistance, 1 << Layer.Tile);
-                    var isBehindBlackTile = tileHits.Any(th => th.transform.GetComponent<Tile>() is BlackTile)
-                        || tile is BlackTile;
-                    var blackTileCoeff = isBehindBlackTile ? 0f : 1f;
+                    // Canceled for now
+                    //// If this tile is behind a black tile, it will block the movement
+                    //var minProj = Mathf.Min(proj1, proj2);
+                    //var tileHits = Physics.RaycastAll(new Ray(tile.Position, alignedDir), Mathf.Abs(minProj - tileProj),
+                    //    1 << Layer.Tile);
+                    //var isBehindBlackTile = tileHits.Any(th => th.transform.GetComponent<Tile>() is BlackTile)
+                    //    || tile is BlackTile;
+                    //var blackTileCoeff = isBehindBlackTile ? 0f : 1f;
 
-                    targetPos = alignedDir * moveDistance * blackTileCoeff + tile.Position;
+                    targetPos = alignedDir * moveDistance + tile.Position;
                 }
                 else // In between -- these are going to be flown away
                 {
@@ -209,6 +215,7 @@ namespace Prefabric
                         flyAwayDir = Random.value > 0.5 ? Vector3.forward : Vector3.right;
                     }
 
+                    // Fly away
                     targetPos = tile.Position 
                         + flyAwayDir 
                             * Random.Range(5f, 15f)

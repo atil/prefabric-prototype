@@ -30,7 +30,7 @@ namespace Prefabric.LevelEditor
         {
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {
-                MessageBus.Publish(new EditorTileSelectedEvent() { SelectedTileResource = _buttonResources[0]});
+                MessageBus.Publish(new EditorTileSelectedEvent() { SelectedTileResource = _buttonResources[0] });
             }
             if (Input.GetKeyDown(KeyCode.Alpha2))
             {
@@ -43,6 +43,10 @@ namespace Prefabric.LevelEditor
             if (Input.GetKeyDown(KeyCode.Alpha4))
             {
                 MessageBus.Publish(new EditorTileSelectedEvent() { SelectedTileResource = _buttonResources[3] });
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha5))
+            {
+                MessageBus.Publish(new EditorTileSelectedEvent() { SelectedTileResource = _buttonResources[4] });
             }
 
         }
