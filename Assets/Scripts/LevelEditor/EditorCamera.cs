@@ -23,7 +23,7 @@ namespace Prefabric.LevelEditor
         public Action<Tile> HoverExit;
 
         private const float MoveSpeed = 20f;
-        private const float RotSpeed = 50f;
+        private const float RotSpeed = 100f;
 
         private Tile _currentHoverTile;
         private Transform _tr;

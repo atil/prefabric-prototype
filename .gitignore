@@ -1,6 +1,7 @@
 Library/
 Temp/
 Assets/Plugins/UniRx/Examples
+Build/
 .vs/
 Gifs/
 *.csproj
