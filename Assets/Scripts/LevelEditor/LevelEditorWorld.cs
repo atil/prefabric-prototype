@@ -36,21 +36,26 @@ namespace Prefabric.LevelEditor
 
             MessageBus.OnEvent<EditorSaveLevelEvent>().Subscribe(ev =>
             {
-                _levelLoader.SaveLevelAt(_tiles, ev.Path);
+                if (!string.IsNullOrEmpty(ev.Path))
+                {
+                    _levelLoader.SaveLevelAt(_tiles, ev.Path);
+                }
             });
 
             MessageBus.OnEvent<EditorLoadLevelEvent>().Subscribe(ev =>
             {
+                if (string.IsNullOrEmpty(ev.Path))
+                {
+                    return;
+                }
+
                 foreach(var tile in _tiles)
                 {
                     DestroyImmediate(tile.gameObject);
                 }
                 _tiles.Clear();
 
-                if (!string.IsNullOrEmpty(ev.Path))
-                {
-                    _tiles = _levelLoader.LoadLevelAt(ev.Path);
-                }
+                _tiles = _levelLoader.LoadLevelAt(ev.Path);
             });
 
             MessageBus.OnEvent<EditorTileSelectedEvent>().Subscribe(ev =>

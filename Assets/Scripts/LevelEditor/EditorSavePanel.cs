@@ -14,6 +14,7 @@ namespace Prefabric.LevelEditor
         public Button SaveButton;
         public InputField LevelNameField;
         public Transform ButtonsParent;
+        public Button CloseButton;
 
         private readonly List<GameObject> _buttons = new List<GameObject>();
         private GameObject _fileButtonPrefab;
@@ -38,6 +39,12 @@ namespace Prefabric.LevelEditor
                     SetActive(false);
                     MessageBus.Publish(new EditorSaveLevelEvent() {Path = lvlPath });
                 }
+            });
+
+            CloseButton.onClick.AddListener(() =>
+            {
+                SetActive(false);
+                MessageBus.Publish(new EditorSaveLevelEvent() {Path = string.Empty });
             });
         }
 

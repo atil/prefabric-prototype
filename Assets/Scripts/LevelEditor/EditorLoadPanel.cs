@@ -13,6 +13,7 @@ namespace Prefabric.LevelEditor
         public Button LoadButton;
         public Transform ButtonsParent;
         public Text LevelNameText;
+        public Button CloseButton;
 
         private readonly List<GameObject> _buttons = new List<GameObject>();
         private GameObject _fileButtonPrefab;
@@ -30,6 +31,13 @@ namespace Prefabric.LevelEditor
                     SetActive(false);
                     MessageBus.Publish(new EditorLoadLevelEvent() {Path = LevelNameText.text + ".json" });
                 }
+            });
+
+
+            CloseButton.onClick.AddListener(() =>
+            {
+                SetActive(false);
+                MessageBus.Publish(new EditorLoadLevelEvent() { Path = string.Empty });
             });
         }
 
