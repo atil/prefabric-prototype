@@ -66,7 +66,7 @@ namespace Prefabric
             // Double click
             if (Input.GetMouseButtonDown(1))
             {
-                if (_doubleClickTimer < 0.5f)
+                if (_doubleClickTimer < 0.3f)
                 {
                     MessageBus.Publish(new UnbendCommand());
                 }
