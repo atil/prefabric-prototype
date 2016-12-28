@@ -195,7 +195,7 @@ namespace Prefabric
             IDisposable fadeoutDisposable = null;
             fadeoutDisposable = Observable.EveryUpdate().Subscribe(x =>
             {
-                _material.SetAlpha(Curve.Instance.TileTween.Evaluate(f));
+                _material.SetAlpha(Curve.Instance.TileTweenFade.Evaluate(f));
                 f -= PfTime.DeltaTime * BendFadeSpeed;
 
                 if (f < 0.001)
@@ -214,7 +214,7 @@ namespace Prefabric
             IDisposable fadeoutDisposable = null;
             fadeoutDisposable = Observable.EveryUpdate().Subscribe(x =>
             {
-                _material.SetAlpha(Curve.Instance.TileTween.Evaluate(f));
+                _material.SetAlpha(Curve.Instance.TileTweenFade.Evaluate(f));
                 f += PfTime.DeltaTime * BendFadeSpeed;
 
                 if (f > 0.999)
