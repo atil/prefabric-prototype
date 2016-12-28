@@ -13,6 +13,11 @@ namespace Prefabric
         private const float CamMinDistance = 5f;
         private const float CamMaxDistance = 20f;
 
+        /// <summary>
+        /// Sometimes we may want to make the camera more snappy
+        /// </summary>
+        private float _camFollowCoeff = 1f;
+
         private float _camFollowDistance = 15f;
         private readonly Transform _camTransform;
         private readonly Camera _cam;
@@ -41,14 +46,20 @@ namespace Prefabric
             MessageBus.OnEvent<BendEvent>().Subscribe(ev =>
             {
                 Transform.SetParent(_lastStandingTile.Transform);
+                _camFollowCoeff = 10f; // Cam should snap when bending
+                _camTransform.SetParent(Transform);
             });
             MessageBus.OnEvent<UnbendEvent>().Subscribe(ev =>
             {
                 Transform.SetParent(_lastStandingTile.Transform);
+                _camFollowCoeff = 1f;
+                _camTransform.SetParent(Transform);
             });
+
             MessageBus.OnEvent<TweenCompletedEvent>().Subscribe(ev =>
             {
                 Transform.SetParent(null);
+                _camTransform.SetParent(null);
             });
         }
 
@@ -101,7 +112,7 @@ namespace Prefabric
             var deltaMove = Position - beforeMove;
             _cmdCamTargetPos += deltaMove;
 
-            _camTransform.position = Vector3.Lerp(_camTransform.position, _cmdCamTargetPos, Time.deltaTime * 15);
+            _camTransform.position = Vector3.Lerp(_camTransform.position, _cmdCamTargetPos, Time.deltaTime * _camFollowCoeff * 15);
             _camTransform.LookAt(Position);
 
             // Store last standing tile
