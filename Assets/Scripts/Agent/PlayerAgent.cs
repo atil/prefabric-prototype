@@ -3,6 +3,8 @@ using UnityEngine;
 
 namespace Prefabric
 {
+    public class PlayerFallEvent : PfSceneEvent { }
+
     public class PlayerAgent : AgentBase
     {
         private const float MaxSpeed = 300f;
@@ -120,6 +122,13 @@ namespace Prefabric
             if (Physics.Raycast(Position, Vector3.down, out hit, 2f, 1 << Layer.Tile))
             {
                 _lastStandingTile = hit.transform.GetComponent<Tile>();
+            }
+
+            // Fall check
+            if (Position.y < -8)
+            {
+                Position = _lastStandingTile.Position + Vector3.up;
+                MessageBus.Publish(new PlayerFallEvent());
             }
         }
 
