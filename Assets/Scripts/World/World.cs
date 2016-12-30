@@ -19,6 +19,9 @@ namespace Prefabric
         [SerializeField]
         private Transform _playerTransform;
 
+        [SerializeField]
+        private Ui _ui;
+
         private List<AgentBase> _agents;
         private KeyboardMouseController _keyboardMouseController;
         private MapManager _mapManager;
@@ -42,6 +45,7 @@ namespace Prefabric
             _player = new PlayerAgent(_playerTransform, _camTransform);
             _agents = new List<AgentBase> { _player };
             _mapManager = new MapManager(args.LevelName, _agents);
+            _ui.Init();
 
             MessageBus.OnEvent<EndZoneTriggeredEvent>().Subscribe(x =>
             {

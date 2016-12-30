@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Prefabric
 {
@@ -58,6 +59,13 @@ namespace Prefabric
         }
 
         public static void SetAlpha(this Material m, float a)
+        {
+            var c = m.color;
+            c.a = a;
+            m.color = c;
+        }
+
+        public static void SetAlpha(this Image m, float a)
         {
             var c = m.color;
             c.a = a;

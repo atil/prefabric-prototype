@@ -1,4 +1,5 @@
-﻿using UniRx;
+﻿using System;
+using UniRx;
 using UnityEngine;
 
 namespace Prefabric
@@ -35,6 +36,7 @@ namespace Prefabric
         private Vector3 _cmdCamTargetPos;
 
         private Tile _lastStandingTile;
+        private bool _isFallingdown; // Couldn't come up with a better idea
 
         public PlayerAgent(Transform transform, Transform camTransform) : base(transform)
         {
@@ -125,10 +127,15 @@ namespace Prefabric
             }
 
             // Fall check
-            if (Position.y < -8)
+            if (Position.y < -8 && !_isFallingdown)
             {
-                Position = _lastStandingTile.Position + Vector3.up;
+                _isFallingdown = true;
                 MessageBus.Publish(new PlayerFallEvent());
+                Observable.Timer(TimeSpan.FromSeconds(0.7f)).Subscribe(x =>
+                {
+                    _isFallingdown = false;
+                    Position = _lastStandingTile.Position + Vector3.up;
+                });
             }
         }
 

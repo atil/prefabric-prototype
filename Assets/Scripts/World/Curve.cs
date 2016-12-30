@@ -16,7 +16,7 @@ namespace Prefabric
         }
 
         public AnimationCurve TileTween;
-
         public AnimationCurve TileTweenFade;
+        public AnimationCurve WhiteScreenFade;
     }
 }
