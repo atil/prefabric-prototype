@@ -18,22 +18,40 @@ namespace Prefabric
 
         public void Init()
         {
+            Flash(WhiteScreen, Curve.Instance.LevelBeginFade);
+
             // When player is falling down, flash the screen in a nice way
             MessageBus.OnEvent<PlayerFallEvent>().Subscribe(ev =>
             {
-                var t = 0f;
-                IDisposable fadeDisposable = null;
-                fadeDisposable = Observable.EveryUpdate().Subscribe(x =>
-                {
-                    WhiteScreen.SetAlpha(Curve.Instance.WhiteScreenFade.Evaluate(t));
+                Flash(WhiteScreen, Curve.Instance.PlayerFallFade);
+            });
 
-                    t += PfTime.DeltaTime;
-                    if (t > 1)
-                    {
-                        WhiteScreen.SetAlpha(0f);
-                        fadeDisposable.Dispose();
-                    }
-                });
+            // Flash on level finish
+            MessageBus.OnEvent<EndZoneTriggeredEvent>().Subscribe(ev =>
+            {
+                Flash(WhiteScreen, Curve.Instance.LevelPassFade);
+            });
+        }
+
+        private void Flash(Image img, AnimationCurve curve)
+        {
+            var t = 0f;
+            IDisposable fadeDisposable = null;
+            fadeDisposable = Observable.EveryUpdate().Subscribe(x =>
+            {
+                if (img == null) // Sometimes it gets destroyed during a level load
+                {
+                    return;
+                }
+
+                img.SetAlpha(curve.Evaluate(t));
+
+                t += PfTime.DeltaTime;
+                if (t > Curve.Instance.LevelPassFade.length)
+                {
+                    img.SetAlpha(0f);
+                    fadeDisposable.Dispose();
+                }
             });
         }
     }

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UniRx;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -47,26 +48,31 @@ namespace Prefabric
             _mapManager = new MapManager(args.LevelName, _agents);
             _ui.Init();
 
-            MessageBus.OnEvent<EndZoneTriggeredEvent>().Subscribe(x =>
+            MessageBus.OnEvent<EndZoneTriggeredEvent>().Subscribe(ev =>
             {
-                if (args.IsEditMode) // Passing level in editor scene
+                // Wait for UI flash
+                // ... but a little less in order not to see a frame of non flashy screen
+                Observable.Timer(TimeSpan.FromSeconds(Curve.Instance.LevelPassFade.length - 0.1)).Subscribe(x =>
                 {
-                    // Load the same level with the same args
-                    PfScene.Load("GameScene");
-                    return;
-                }
+                    if (args.IsEditMode) // Passing level in editor scene
+                    {
+                        // Load the same level with the same args
+                        PfScene.Load("GameScene");
+                        return;
+                    }
 
-                // Advance level
-                var curLevelIndex = _levelPaths.IndexOf(args.LevelName);
-                if (++curLevelIndex >= _levelPaths.Count)
-                {
-                    // TODO: All levels done, endgame
-                }
-                else
-                {
-                    GameSceneArgs.Write(_levelPaths[curLevelIndex], false);
-                    PfScene.Load("GameScene");
-                }
+                    // Advance level
+                    var curLevelIndex = _levelPaths.IndexOf(args.LevelName);
+                    if (++curLevelIndex >= _levelPaths.Count)
+                    {
+                        // TODO: All levels done, endgame
+                    }
+                    else
+                    {
+                        GameSceneArgs.Write(_levelPaths[curLevelIndex], false);
+                        PfScene.Load("GameScene");
+                    }
+                });
             });
 
 	        MessageBus.OnEvent<MenuToggleCommand>().Subscribe(ev =>
