@@ -131,7 +131,7 @@ namespace Prefabric
             {
                 _isFallingdown = true;
                 MessageBus.Publish(new PlayerFallEvent());
-                Observable.Timer(TimeSpan.FromSeconds(0.7f)).Subscribe(x =>
+                Observable.Timer(TimeSpan.FromSeconds(0.7f)).Subscribe(x => // TODO: That magic number is haram
                 {
                     _isFallingdown = false;
                     Position = _lastStandingTile.Position + Vector3.up;
