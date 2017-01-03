@@ -95,8 +95,15 @@ namespace Prefabric
             var forward = 
                 Quaternion.AngleAxis(dir.y * -CamRotateSpeed, _camTransform.right)
                 * Quaternion.AngleAxis(dir.x * CamRotateSpeed, Vector3.up) 
-                * _camTransform.forward;
-            _cmdCamTargetPos = Position + (-forward * _camFollowDistance);
+                * _camTransform.forward
+                * -1f; // Look down on the player
+
+            var nextPos = Position + (forward * _camFollowDistance);
+
+            if (Vector3.Angle(Vector3.up, forward) > 10f)
+            {
+                _cmdCamTargetPos = nextPos;
+            }
 
         }
 
