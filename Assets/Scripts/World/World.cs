@@ -18,9 +18,6 @@ namespace Prefabric
         private Transform _camTransform;
 
         [SerializeField]
-        private Transform _playerTransform;
-
-        [SerializeField]
         private Ui _ui;
 
         private List<AgentBase> _agents;
@@ -43,7 +40,10 @@ namespace Prefabric
             _levelPaths = new ReadOnlyCollection<string>(tmpList);
 
             _keyboardMouseController = new KeyboardMouseController();
-            _player = new PlayerAgent(_playerTransform, _camTransform);
+
+	        var playerGo = Instantiate(PfResources.Load<GameObject>(PfResourceType.Player));
+
+            _player = new PlayerAgent(playerGo.transform, _camTransform);
             _agents = new List<AgentBase> { _player };
             _mapManager = new MapManager(args.LevelName, _agents);
             _ui.Init();

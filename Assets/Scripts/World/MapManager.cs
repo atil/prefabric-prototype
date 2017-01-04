@@ -37,6 +37,7 @@ namespace Prefabric
         private Tile _firstSelectedTile;
         private readonly Stack<Tuple<Tile, Tile>> _bendHistory = new Stack<Tuple<Tile, Tile>>();
         private int _currentTweenerCount;
+        private readonly Transform _bendGuide;
 
         public MapManager(string lvlName, List<AgentBase> agents)
         {
@@ -47,6 +48,9 @@ namespace Prefabric
 
             var startTile = _tiles.Find(x => x is StartTile);
             _player.Position = startTile.Position + Vector3.up * 1.5f;
+
+            _bendGuide = Object.Instantiate(PfResources.Load<GameObject>(PfResourceType.BendGuide)).transform;
+            _bendGuide.gameObject.SetActive(false);
 
             MessageBus.OnEvent<TileSelectCommand>().Subscribe(ev => OnTileSelected(ev.Tile));
             MessageBus.OnEvent<TileHoverCommand>().Subscribe(ev => OnTileHover(ev.Tile));
@@ -88,11 +92,13 @@ namespace Prefabric
                 return;
             }
 
-            // No tile selected present
+            // Selecting first tile
             if (_firstSelectedTile == null) 
             {
                 _firstSelectedTile = tile;
                 _firstSelectedTile.VisualState = TileVisualState.Selected;
+                _bendGuide.gameObject.SetActive(true);
+                _bendGuide.position = _firstSelectedTile.Position;
                 return;
             }
 
@@ -102,8 +108,12 @@ namespace Prefabric
                 _firstSelectedTile.VisualState = TileVisualState.Normal;
                 _firstSelectedTile = tile;
                 _firstSelectedTile.VisualState = TileVisualState.Selected;
+                _bendGuide.gameObject.SetActive(true);
+                _bendGuide.position = _firstSelectedTile.Position;
                 return;
             }
+
+            _bendGuide.gameObject.SetActive(false);
 
             // Actual bending
             Bend(_firstSelectedTile, tile);

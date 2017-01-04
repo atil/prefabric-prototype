@@ -17,11 +17,13 @@ namespace Prefabric
         EndZone,
         EditorTileButton,
         EditorFileButton,
+        Player,
+        BendGuide,
     }
 
     /// <summary>
     /// An abstraction layer for loading resources from files
-    /// Built around a "resourcesType -> path" mapping
+    /// Built around a "resourceType -> path" mapping
     /// The good is, there'll be no paths embedded in the code (except here),
     /// and these paths can be read from a file as well, if rebuilding the project becomes an issue
     /// The bad is, it adds another step of work when a resource is needed
@@ -40,6 +42,8 @@ namespace Prefabric
             ResourcePaths.Add(PfResourceType.EndZone, "Prefabs/Tiles/EndZone");
             ResourcePaths.Add(PfResourceType.EditorTileButton, "LevelEditor/Prefabs/TileButton");
             ResourcePaths.Add(PfResourceType.EditorFileButton, "LevelEditor/Prefabs/FileButton");
+            ResourcePaths.Add(PfResourceType.Player, "Prefabs/Player");
+            ResourcePaths.Add(PfResourceType.BendGuide, "Prefabs/BendGuide");
         }
 
         /// <summary>
