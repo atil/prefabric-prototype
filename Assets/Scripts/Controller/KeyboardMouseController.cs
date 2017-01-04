@@ -56,6 +56,13 @@ namespace Prefabric
                 }
             }
 
+            // Click on nothing deselects tile
+            if (!Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, float.MaxValue)
+                && Input.GetMouseButton(0))
+            {
+                MessageBus.Publish(new TileDeselectCommand());
+            }
+            
             // Camera rotate
             if (Input.GetMouseButton(1))
             {

@@ -38,6 +38,8 @@ namespace Prefabric
         public Tile Tile { get; set; }
     }
 
+    public class TileDeselectCommand : PfCommand { }
+
     public class UnbendCommand : PfCommand { }
 
     public class MenuToggleCommand : PfCommand { }

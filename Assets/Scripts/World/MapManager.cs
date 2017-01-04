@@ -54,6 +54,7 @@ namespace Prefabric
 
             MessageBus.OnEvent<TileSelectCommand>().Subscribe(ev => OnTileSelected(ev.Tile));
             MessageBus.OnEvent<TileHoverCommand>().Subscribe(ev => OnTileHover(ev.Tile));
+            MessageBus.OnEvent<TileDeselectCommand>().Subscribe(ev => OnTileDeselect());
             MessageBus.OnEvent<UnbendCommand>().Subscribe(ev => Unbend());
             MessageBus.OnEvent<TileTweenCompletedEvent>().Subscribe(ev => OnTileCompletedTween(ev.Tile));
         }
@@ -120,6 +121,17 @@ namespace Prefabric
 
             _firstSelectedTile.VisualState = TileVisualState.Normal;
             _firstSelectedTile = null;
+        }
+
+        private void OnTileDeselect()
+        {
+            // Clear firstSelectedTile
+            if (_firstSelectedTile != null)
+            {
+                _firstSelectedTile.VisualState = TileVisualState.Normal;
+                _firstSelectedTile = null;
+                _bendGuide.gameObject.SetActive(false);
+            }
         }
 
         private void Bend(Tile tile1, Tile tile2)
