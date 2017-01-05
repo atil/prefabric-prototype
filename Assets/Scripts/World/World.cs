@@ -25,7 +25,7 @@ namespace Prefabric
         private MapManager _mapManager;
         private PlayerAgent _player;
 
-        private ReadOnlyCollection<string> _levelPaths;
+        private readonly List<string> _levelPaths = new List<string>();
 
 	    void Start()
 	    {
@@ -35,9 +35,8 @@ namespace Prefabric
             var json = JSON.Parse(PfResources.LoadStringAt("levelPaths.json"));
             foreach (JSONNode pathString in json["paths"].AsArray)
             {
-                tmpList.Add(pathString.Value);
+                _levelPaths.Add(pathString.Value);
             }
-            _levelPaths = new ReadOnlyCollection<string>(tmpList);
 
             _keyboardMouseController = new KeyboardMouseController();
 
@@ -63,7 +62,15 @@ namespace Prefabric
 
                     // Advance level
                     var curLevelIndex = _levelPaths.IndexOf(args.LevelName);
-                    if (++curLevelIndex >= _levelPaths.Count)
+
+                    if (curLevelIndex == -1)
+                    {
+                        Debug.LogError("Level not found in levelPaths : " + args.LevelName);
+                        return;
+                    }
+
+                    curLevelIndex++;
+                    if (curLevelIndex >= _levelPaths.Count)
                     {
                         // TODO: All levels done, endgame
                     }

@@ -1,11 +1,9 @@
 {
 	"paths" : 
 	[
-		"Levels/testLevel",
-		"Levels/testLevel",
-		"Levels/testLevel",
-		"Levels/testLevel",
-		"Levels/testLevel",
-		"Levels/testLevel",
+		"singleBend.json",
+		"alignmentChain4.json",
+		"bendingWalls.json",
+		"inBetween.json",
 	]
 }

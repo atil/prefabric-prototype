@@ -37,7 +37,7 @@ namespace Prefabric
             var gameSceneArgsJson = JSON.Parse(PfResources.LoadStringAt("gameSceneArgs.json"));
             return new GameSceneArgs()
             {
-                LevelName = gameSceneArgsJson["levelName"].Value + ".json",
+                LevelName = gameSceneArgsJson["levelName"].Value,
                 IsEditMode = gameSceneArgsJson["isEditMode"].AsBool
             };
         }
@@ -50,9 +50,9 @@ namespace Prefabric
         public static void Write(string lvlName, bool isEditMode)
         {
             var gameSceneArgsJson = JSON.Parse(PfResources.LoadStringAt("gameSceneArgs.json"));
-            gameSceneArgsJson["levelPath"] = lvlName;
+            gameSceneArgsJson["levelName"] = lvlName;
             gameSceneArgsJson["isEditMode"].AsBool = isEditMode;
-            System.IO.File.WriteAllText(Application.dataPath + "/Resources/gameSceneArgs.json", gameSceneArgsJson.ToString());
+            System.IO.File.WriteAllText(Application.dataPath + "/gameSceneArgs.json", gameSceneArgsJson.ToString());
         }
     }
 }
