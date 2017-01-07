@@ -67,9 +67,12 @@ namespace Prefabric.LevelEditor
             {
                 GameSceneArgs.Write("testLevel.json", true);
                 var lvlPath = Application.dataPath + "/Levels/testLevel.json";
-                _levelLoader.SaveLevelAt(_tiles, lvlPath);
+                var succ = _levelLoader.SaveLevelAt(_tiles, lvlPath);
 
-                PfScene.Load("GameScene");
+                if (succ)
+                {
+                    PfScene.Load("GameScene");
+                }
             });
 
             MessageBus.OnEvent<EditorClearLevelEvent>().Subscribe(ev =>
