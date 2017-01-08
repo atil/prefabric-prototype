@@ -19,6 +19,8 @@ namespace Prefabric
         Normal,
         Hovered,
         Selected,
+        BendHighlighted,
+        Bent,
     }
 
     public struct TileState
