@@ -53,6 +53,16 @@ namespace Prefabric
     /// </summary>
     public abstract class ControllerBase
     {
+        /// <summary>
+        /// A toggle that allows/prevents this controller from emitting commands
+        /// </summary>
+        public bool IsEnabled { get; set; }
+
         public virtual void Update() { }
+
+        protected ControllerBase()
+        {
+            IsEnabled = true;
+        }
     }
 }

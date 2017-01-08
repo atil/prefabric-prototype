@@ -88,6 +88,10 @@ namespace Prefabric
 	            {
 	                PfScene.Load("LevelEditorScene");
 	            }
+	            else
+	            {
+	                _ui.OnMenuToggled();
+	            }
 	        });
 	    }
 

@@ -18,6 +18,19 @@ namespace Prefabric
         {
             base.Update();
 
+            // Menu toggle
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                MessageBus.Publish(new MenuToggleCommand());
+                IsEnabled = !IsEnabled;
+            }
+
+            // Toggling menu locks this controller
+            if (!IsEnabled)
+            {
+                return;
+            }
+
             // Agent move
             var dir = Vector3.zero;
             if (Input.GetKey(KeyCode.W))
@@ -84,12 +97,6 @@ namespace Prefabric
 
             // Camera zoom
             MessageBus.Publish(new CameraZoomCommand() { Amount = Input.GetAxis("Mouse ScrollWheel") });
-
-            // Menu toggle
-            if (Input.GetKeyDown(KeyCode.Escape))
-            {
-                MessageBus.Publish(new MenuToggleCommand());
-            }
         }
     }
 }

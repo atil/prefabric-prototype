@@ -8,6 +8,10 @@ using UnityEngine.UI;
 
 namespace Prefabric
 {
+    /// <summary>
+    /// A wrapper around Unity's LayerMask's static functions
+    /// It's better to have those strings in one place only
+    /// </summary>
     public static class Layer
     {
         public static LayerMask Tile { get; private set; }

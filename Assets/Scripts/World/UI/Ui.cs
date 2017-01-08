@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityStandardAssets.ImageEffects;
 
 namespace Prefabric
 {
@@ -15,6 +16,8 @@ namespace Prefabric
     public class Ui : MonoBehaviour
     {
         public Image WhiteScreen;
+        public PauseMenu PauseMenu;
+        public Blur Blur;
 
         public void Init()
         {
@@ -54,6 +57,13 @@ namespace Prefabric
                     fadeDisposable.Dispose();
                 }
             });
+        }
+
+        public void OnMenuToggled()
+        {
+            var isActive = !PauseMenu.gameObject.activeSelf;
+            Blur.enabled = isActive;
+            PauseMenu.gameObject.SetActive(isActive);
         }
     }
 }
