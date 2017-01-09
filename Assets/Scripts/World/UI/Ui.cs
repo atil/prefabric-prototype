@@ -37,7 +37,7 @@ namespace Prefabric
         }
 
         // TODO: Is it good for it to be static?
-        private static void Flash(Image img, AnimationCurve curve)
+        public static void Flash(Image img, AnimationCurve curve)
         {
             var t = 0f;
             IDisposable fadeDisposable = null;

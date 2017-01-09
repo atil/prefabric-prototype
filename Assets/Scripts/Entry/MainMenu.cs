@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -20,7 +21,11 @@ namespace Prefabric
             PlayButton.onClick.AddListener(() =>
             {
                 GameSceneArgs.Write("singleBend.json", false);
-                PfScene.Load("GameScene");
+                Ui.Flash(WhiteScreen, Curve.Instance.LevelPassFade);
+                Observable.Timer(TimeSpan.FromSeconds(Curve.Instance.LevelPassFade.length)).Subscribe(x =>
+                {
+                    PfScene.Load("GameScene");
+                });
             });
 
             LevelEditorButton.onClick.AddListener(() =>
