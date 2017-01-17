@@ -18,6 +18,8 @@ namespace Prefabric
 
         void Start()
         {
+            Ui.Flash(WhiteScreen, Curve.Instance.LevelBeginFade);
+
             PlayButton.onClick.AddListener(() =>
             {
                 GameSceneArgs.Write("singleBend.json", false);

@@ -12,6 +12,8 @@ Semi-up-to-date Trello : [Link](https://trello.com/b/vvbPBpeb/prefabric)
 
 Open source projects used:
 
-[UniRx](https://github.com/neuecc/UniRx) : Reactive Extensions for Unity
+- [UniRx](https://github.com/neuecc/UniRx) : Reactive Extensions for Unity
 
-[SimpleJSON](http://wiki.unity3d.com/index.php/SimpleJSON) : A single file to parse and write to .json files
+- [SimpleJSON](http://wiki.unity3d.com/index.php/SimpleJSON) : A single file to parse and write to .json files
+
+- [Quicksand font](https://www.fontsquirrel.com/fonts/quicksand)
