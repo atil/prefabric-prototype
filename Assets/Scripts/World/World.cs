@@ -8,6 +8,11 @@ using UnityEngine.SceneManagement;
 
 namespace Prefabric
 {
+    public class RestartLevelEvent : PfSceneEvent { }
+
+    // This might be a command
+    public class QuitGameEvent : PfSceneEvent { }
+
     /// <summary>
     /// This is the main MonoBehaviour of GameScene
     /// This Start() and Update() functions are what keeps the game running
@@ -27,9 +32,9 @@ namespace Prefabric
 
         private readonly List<string> _levelPaths = new List<string>();
 
-	    void Start()
-	    {
-	        var args = GameSceneArgs.Load();
+        void Start()
+        {
+            var args = GameSceneArgs.Load();
 
             var tmpList = new List<string>();
             var json = JSON.Parse(PfResources.LoadStringAt("levelPaths.json"));
@@ -40,7 +45,7 @@ namespace Prefabric
 
             _keyboardMouseController = new KeyboardMouseController();
 
-	        var playerGo = Instantiate(PfResources.Load<GameObject>(PfResourceType.Player));
+            var playerGo = Instantiate(PfResources.Load<GameObject>(PfResourceType.Player));
 
             _player = new PlayerAgent(playerGo.transform, _camTransform);
             _agents = new List<AgentBase> { _player };
@@ -72,7 +77,8 @@ namespace Prefabric
                     curLevelIndex++;
                     if (curLevelIndex >= _levelPaths.Count)
                     {
-                        // TODO: All levels done, endgame
+                        // Endgame
+                        PfScene.Load("MainMenuScene");
                     }
                     else
                     {
@@ -82,18 +88,32 @@ namespace Prefabric
                 });
             });
 
-	        MessageBus.OnEvent<MenuToggleCommand>().Subscribe(ev =>
-	        {
-	            if (args.IsEditMode)
-	            {
-	                PfScene.Load("LevelEditorScene");
-	            }
-	            else
-	            {
-	                _ui.OnMenuToggled();
-	            }
-	        });
-	    }
+            MessageBus.OnEvent<MenuToggleCommand>().Subscribe(ev =>
+            {
+                if (args.IsEditMode)
+                {
+                    PfScene.Load("LevelEditorScene");
+                }
+                else
+                {
+                    _ui.OnMenuToggled();
+                }
+            });
+
+            MessageBus.OnEvent<RestartLevelEvent>().Subscribe(ev =>
+            {
+                Observable.Timer(TimeSpan.FromSeconds(Curve.Instance.LevelPassFade.length - 0.1))
+                    .Subscribe(x =>
+                {
+                    PfScene.Load("MainMenuScene");
+                });
+            });
+
+            MessageBus.OnEvent<QuitGameEvent>().Subscribe(ev =>
+            {
+                Application.Quit();
+            });
+        }
 
         void Update()
         {

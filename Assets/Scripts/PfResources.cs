@@ -19,6 +19,11 @@ namespace Prefabric
         EditorFileButton,
         Player,
         BendGuide,
+        SfxClick1,
+        SfxClick2,
+        SfxMusic1,
+        SfxMusic2,
+        SfxMusic3,
     }
 
     /// <summary>
@@ -44,6 +49,11 @@ namespace Prefabric
             ResourcePaths.Add(PfResourceType.EditorFileButton, "LevelEditor/Prefabs/FileButton");
             ResourcePaths.Add(PfResourceType.Player, "Prefabs/Player");
             ResourcePaths.Add(PfResourceType.BendGuide, "Prefabs/BendGuide");
+            ResourcePaths.Add(PfResourceType.SfxClick1, "Sfx/Click1");
+            ResourcePaths.Add(PfResourceType.SfxClick2, "Sfx/Click2");
+            ResourcePaths.Add(PfResourceType.SfxMusic1, "Sfx/Music_Floating_Cities");
+            ResourcePaths.Add(PfResourceType.SfxMusic2, "Sfx/Music_Soaring");
+            ResourcePaths.Add(PfResourceType.SfxMusic3, "Sfx/Music_Overheat");
         }
 
         /// <summary>

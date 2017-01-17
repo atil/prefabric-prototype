@@ -11,16 +11,16 @@ namespace Prefabric
     public class MainMenu : MonoBehaviour
     {
         public Image WhiteScreen;
-        public Button PlayButton;
-        public Button LevelEditorButton;
-        public Button GithubButton;
-        public Button ExitButton;
+        public PfButton PlayButton;
+        public PfButton LevelEditorButton;
+        public PfButton GithubButton;
+        public PfButton ExitButton;
 
         void Start()
         {
             Ui.Flash(WhiteScreen, Curve.Instance.LevelBeginFade);
 
-            PlayButton.onClick.AddListener(() =>
+            PlayButton.Clicked += () =>
             {
                 GameSceneArgs.Write("singleBend.json", false);
                 Ui.Flash(WhiteScreen, Curve.Instance.LevelPassFade);
@@ -28,22 +28,22 @@ namespace Prefabric
                 {
                     PfScene.Load("GameScene");
                 });
-            });
+            };
 
-            LevelEditorButton.onClick.AddListener(() =>
+            LevelEditorButton.Clicked += () =>
             {
                 PfScene.Load("LevelEditorScene");
-            });
+            };
 
-            GithubButton.onClick.AddListener(() =>
+            GithubButton.Clicked += () =>
             {
                 Application.OpenURL("https://github.com/atil/prefabric");
-            });
+            };
 
-            ExitButton.onClick.AddListener(() =>
+            ExitButton.Clicked += () =>
             {
                 Application.Quit();
-            });
+            };
         }
     }
 }

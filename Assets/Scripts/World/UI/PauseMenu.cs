@@ -10,8 +10,26 @@ namespace Prefabric
     public class PauseMenu : MonoBehaviour
     {
         public Text HeaderText;
-        public Button ResumeButton;
-        public Button ReturnToMenuButton;
-        public Button QuitButton;
+        public PfButton ResumeButton;
+        public PfButton ReturnToMenuButton;
+        public PfButton QuitButton;
+
+        void Start()
+        {
+            ResumeButton.Clicked += () =>
+            {
+                MessageBus.Publish(new MenuToggleCommand());
+            };
+
+            ReturnToMenuButton.Clicked += () =>
+            {
+                MessageBus.Publish(new RestartLevelEvent());
+            };
+
+            QuitButton.Clicked += () =>
+            {
+                MessageBus.Publish(new QuitGameEvent());
+            };
+        }
     }
 }

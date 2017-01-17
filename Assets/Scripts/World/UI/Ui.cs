@@ -34,6 +34,12 @@ namespace Prefabric
             {
                 Flash(WhiteScreen, Curve.Instance.LevelPassFade);
             });
+
+            // ... and returning to menu
+            MessageBus.OnEvent<RestartLevelEvent>().Subscribe(ev =>
+            {
+                Flash(WhiteScreen, Curve.Instance.LevelPassFade);
+            });
         }
 
         // TODO: Is it good for it to be static?
