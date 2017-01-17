@@ -24,6 +24,11 @@ namespace Prefabric
         SfxMusic1,
         SfxMusic2,
         SfxMusic3,
+        SfxTileSelect1,
+        SfxTileSelect2,
+        SfxBendFail,
+        SfxUnbend,
+        CursorImage,
     }
 
     /// <summary>
@@ -54,6 +59,11 @@ namespace Prefabric
             ResourcePaths.Add(PfResourceType.SfxMusic1, "Sfx/Music_Floating_Cities");
             ResourcePaths.Add(PfResourceType.SfxMusic2, "Sfx/Music_Soaring");
             ResourcePaths.Add(PfResourceType.SfxMusic3, "Sfx/Music_Overheat");
+            ResourcePaths.Add(PfResourceType.SfxTileSelect1, "Sfx/TileSelect1");
+            ResourcePaths.Add(PfResourceType.SfxTileSelect2, "Sfx/TileSelect2");
+            ResourcePaths.Add(PfResourceType.SfxBendFail, "Sfx/BendFail");
+            ResourcePaths.Add(PfResourceType.SfxUnbend, "Sfx/Unbend");
+            ResourcePaths.Add(PfResourceType.CursorImage, "Textures/Cursor");
         }
 
         /// <summary>

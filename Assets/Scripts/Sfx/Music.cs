@@ -16,7 +16,7 @@ namespace Prefabric
         private static readonly AudioSource AudioSource;
         private static readonly AnimationCurve LinearUpCurve;
         private static readonly AnimationCurve LinearDownCurve;
-        private const float MusicMaxLevel = 0.7f; // TODO: These should change with some volume option
+        private const float MusicMaxLevel = 0.4f; // TODO: These should change with some volume option
 
         static Music()
         {

@@ -14,10 +14,9 @@ namespace Prefabric
         void Start()
         {
             Music.Play(true);
-            Observable.NextFrame().Subscribe(x =>
-            {
-                PfScene.Load("MainMenuScene");
-            });
+
+            Cursor.SetCursor(PfResources.Load<Texture2D>(PfResourceType.CursorImage), Vector2.zero, CursorMode.ForceSoftware);
+            PfScene.Load("MainMenuScene");
         }
        
     }

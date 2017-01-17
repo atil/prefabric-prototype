@@ -39,6 +39,8 @@ namespace Prefabric
         private int _currentTweenerCount;
         private readonly Transform _bendGuide;
 
+       
+
         public MapManager(string lvlName, List<AgentBase> agents)
         {
             _agents = agents;
@@ -100,6 +102,8 @@ namespace Prefabric
                 _firstSelectedTile.VisualState = TileVisualState.Selected;
                 _bendGuide.gameObject.SetActive(true);
                 _bendGuide.position = _firstSelectedTile.Position;
+
+                Sfx.Play(PfResourceType.SfxTileSelect1);
                 return;
             }
 
@@ -111,6 +115,8 @@ namespace Prefabric
                 _firstSelectedTile.VisualState = TileVisualState.Selected;
                 _bendGuide.gameObject.SetActive(true);
                 _bendGuide.position = _firstSelectedTile.Position;
+
+                Sfx.Play(PfResourceType.SfxTileSelect1);
                 return;
             }
 
@@ -170,6 +176,8 @@ namespace Prefabric
                     Bender1 = tile1,
                     Bender2 = tile2,
                 });
+
+                Sfx.Play(PfResourceType.SfxBendFail);
 
                 return;
             }
@@ -257,6 +265,9 @@ namespace Prefabric
             });
 
             _bendHistory.Push(new Tuple<Tile, Tile>(tile1, tile2));
+
+            Sfx.Play(PfResourceType.SfxTileSelect2);
+
         }
 
         private void Unbend()
@@ -274,6 +285,8 @@ namespace Prefabric
             {
                 tile.Unbend();
             }
+
+            Sfx.Play(PfResourceType.SfxUnbend);
 
             MessageBus.Publish(new UnbendEvent());
         }
