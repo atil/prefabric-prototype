@@ -36,7 +36,7 @@ namespace Prefabric
             });
 
             // ... and returning to menu
-            MessageBus.OnEvent<RestartLevelEvent>().Subscribe(ev =>
+            MessageBus.OnEvent<ReturnToMenuEvent>().Subscribe(ev =>
             {
                 Flash(WhiteScreen, Curve.Instance.LevelPassFade);
             });

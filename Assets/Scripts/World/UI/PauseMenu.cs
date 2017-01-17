@@ -23,7 +23,7 @@ namespace Prefabric
 
             ReturnToMenuButton.Clicked += () =>
             {
-                MessageBus.Publish(new RestartLevelEvent());
+                MessageBus.Publish(new ReturnToMenuEvent());
             };
 
             QuitButton.Clicked += () =>

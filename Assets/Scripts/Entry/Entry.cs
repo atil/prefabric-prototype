@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UniRx;
 using UnityEngine;
 
 namespace Prefabric
@@ -12,7 +13,11 @@ namespace Prefabric
     {
         void Start()
         {
-            PfScene.Load("MainMenuScene");
+            Music.Play(true);
+            Observable.NextFrame().Subscribe(x =>
+            {
+                PfScene.Load("MainMenuScene");
+            });
         }
        
     }

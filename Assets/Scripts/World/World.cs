@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
 
 namespace Prefabric
 {
-    public class RestartLevelEvent : PfSceneEvent { }
+    public class ReturnToMenuEvent : PfSceneEvent { }
 
     // This might be a command
     public class QuitGameEvent : PfSceneEvent { }
@@ -34,6 +34,8 @@ namespace Prefabric
 
         void Start()
         {
+            Music.FadeIn();
+
             var args = GameSceneArgs.Load();
 
             var tmpList = new List<string>();
@@ -54,6 +56,8 @@ namespace Prefabric
 
             MessageBus.OnEvent<EndZoneTriggeredEvent>().Subscribe(ev =>
             {
+                Music.FadeOut();
+
                 // Wait for UI flash
                 // ... but a little less in order not to see a frame of non flashy screen
                 Observable.Timer(TimeSpan.FromSeconds(Curve.Instance.LevelPassFade.length - 0.1)).Subscribe(x =>
@@ -100,8 +104,10 @@ namespace Prefabric
                 }
             });
 
-            MessageBus.OnEvent<RestartLevelEvent>().Subscribe(ev =>
+            MessageBus.OnEvent<ReturnToMenuEvent>().Subscribe(ev =>
             {
+                Music.FadeOut();
+
                 Observable.Timer(TimeSpan.FromSeconds(Curve.Instance.LevelPassFade.length - 0.1))
                     .Subscribe(x =>
                 {

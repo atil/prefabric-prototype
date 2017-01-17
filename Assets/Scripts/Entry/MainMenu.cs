@@ -22,16 +22,19 @@ namespace Prefabric
 
             PlayButton.Clicked += () =>
             {
-                GameSceneArgs.Write("singleBend.json", false);
+                GameSceneArgs.Write("singleBend.json", false); // Load first level
                 Ui.Flash(WhiteScreen, Curve.Instance.LevelPassFade);
+                Music.Play(true);
                 Observable.Timer(TimeSpan.FromSeconds(Curve.Instance.LevelPassFade.length)).Subscribe(x =>
                 {
+
                     PfScene.Load("GameScene");
                 });
             };
 
             LevelEditorButton.Clicked += () =>
             {
+                Music.FadeOut();
                 PfScene.Load("LevelEditorScene");
             };
 
