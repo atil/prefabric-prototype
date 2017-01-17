@@ -16,6 +16,10 @@ namespace Prefabric
         public PfButton GithubButton;
         public PfButton ExitButton;
 
+        public GameObject CreditsPanel;
+        public PfButton CreditsButton;
+        public PfButton CreditsCloseButton;
+
         void Start()
         {
             Ui.Flash(WhiteScreen, Curve.Instance.LevelBeginFade);
@@ -46,6 +50,16 @@ namespace Prefabric
             ExitButton.Clicked += () =>
             {
                 Application.Quit();
+            };
+
+            CreditsButton.Clicked += () =>
+            {
+                CreditsPanel.SetActive(true);
+            };
+
+            CreditsCloseButton.Clicked += () =>
+            {
+                CreditsPanel.SetActive(false);
             };
         }
     }
