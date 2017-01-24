@@ -101,6 +101,7 @@ namespace Prefabric
 
             var nextPos = Position + (forward * _camFollowDistance);
 
+            // Make sure we don't overshoot "up" direction while rotating
             var d1 = Vector3.Cross((_camTransform.position - Position).normalized, Vector3.up);
             var d2 = Vector3.Cross((nextPos - Position).normalized, Vector3.up);
             if (Vector3.Dot(d1, d2) > 0)
