@@ -32,13 +32,14 @@ namespace Prefabric
 
         private readonly List<string> _levelPaths = new List<string>();
 
+        private bool _isLevelTransition; // Let's not go uglier than that okay?
+
         void Start()
         {
             Music.FadeIn();
 
             var args = GameSceneArgs.Load();
 
-            var tmpList = new List<string>();
             var json = JSON.Parse(PfResources.LoadStringAt("levelPaths.json"));
             foreach (JSONNode pathString in json["paths"].AsArray)
             {
@@ -68,6 +69,13 @@ namespace Prefabric
                         PfScene.Load("GameScene");
                         return;
                     }
+
+                    // Don't trigger it twice
+                    if (_isLevelTransition)
+                    {
+                        return;
+                    }
+                    _isLevelTransition = true;
 
                     // Advance level
                     var curLevelIndex = _levelPaths.IndexOf(args.LevelName);

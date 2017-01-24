@@ -89,6 +89,7 @@ namespace Prefabric
         {
             base.OnCamRotate(dir);
 
+            // Don't rotate too far
             dir = Vector2.ClampMagnitude(dir, 100);
 
             // Rotate the cam to be on the sphere around player
@@ -99,7 +100,6 @@ namespace Prefabric
                 * -1f; // Look down on the player
 
             var nextPos = Position + (forward * _camFollowDistance);
-
             if (Vector3.Angle(Vector3.up, forward) > 10f)
             {
                 _cmdCamTargetPos = nextPos;
@@ -123,7 +123,10 @@ namespace Prefabric
             var deltaMove = Position - beforeMove;
             _cmdCamTargetPos += deltaMove;
 
-            _camTransform.position = Vector3.Lerp(_camTransform.position, _cmdCamTargetPos, Time.deltaTime * _camFollowCoeff * 15);
+            // PfTime isn't used here. Let the cam be independent of our custom timescale
+            _camTransform.position = Vector3.Lerp(_camTransform.position, _cmdCamTargetPos,
+                Time.deltaTime * _camFollowCoeff * 15); 
+
             _camTransform.LookAt(Position);
 
             // Store last standing tile
