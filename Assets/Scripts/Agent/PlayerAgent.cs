@@ -100,11 +100,13 @@ namespace Prefabric
                 * -1f; // Look down on the player
 
             var nextPos = Position + (forward * _camFollowDistance);
-            if (Vector3.Angle(Vector3.up, forward) > 10f)
+
+            var d1 = Vector3.Cross((_camTransform.position - Position).normalized, Vector3.up);
+            var d2 = Vector3.Cross((nextPos - Position).normalized, Vector3.up);
+            if (Vector3.Dot(d1, d2) > 0)
             {
                 _cmdCamTargetPos = nextPos;
             }
-
         }
 
         public override void Update()
