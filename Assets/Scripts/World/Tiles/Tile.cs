@@ -114,6 +114,7 @@ namespace Prefabric
 
         public PfResourceType ResourceType { get; private set; }
 
+        // This is called as soon as the tile is instantiated
         public virtual void Init(Guid id, PfResourceType resType)
         {
             Transform = transform;
@@ -125,6 +126,11 @@ namespace Prefabric
             VisualState = TileVisualState.Normal;
             _initialPosition = Position;
             _collider = GetComponent<BoxCollider>();
+
+            // Higher tiles will look darker
+            // This way, it's way easier to distinguish walls from the floor level
+            var c = (1 - ((Position.y % 3) / 3)) * Color.white;
+            _material.color = new Color(c.r, c.b, c.b, 1f);
         }
 
         public void ExternalUpdate()

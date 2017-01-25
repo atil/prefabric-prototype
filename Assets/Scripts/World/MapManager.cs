@@ -39,8 +39,6 @@ namespace Prefabric
         private int _currentTweenerCount;
         private readonly Transform _bendGuide;
 
-       
-
         public MapManager(string lvlName, List<AgentBase> agents)
         {
             _agents = agents;
