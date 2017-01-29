@@ -19,7 +19,7 @@ namespace Prefabric
         Normal,
         Hovered,
         Selected,
-        BendHighlighted,
+        InBetweenHighlighted,
         Bent,
     }
 
@@ -37,6 +37,7 @@ namespace Prefabric
 
     public class Tile : MonoBehaviour
     {
+        #region Alignment utils
         public static bool IsAxisAligned(Tile tile1, Tile tile2)
         {
             var v1 = tile1.Position;
@@ -44,12 +45,46 @@ namespace Prefabric
 
             var result = new Vector3((int)v1.x ^ (int)v2.x, (int)v1.y ^ (int)v2.y, (int)v1.z ^ (int)v2.z);
 
-            if (!Mathf.Approximately(result.x, 0f)) result.x = 1f;
-            if (!Mathf.Approximately(result.y, 0f)) result.y = 1f;
-            if (!Mathf.Approximately(result.z, 0f)) result.z = 1f;
+            if (!Util.Approx(result.x, 0f)) result.x = 1f;
+            if (!Util.Approx(result.y, 0f)) result.y = 1f;
+            if (!Util.Approx(result.z, 0f)) result.z = 1f;
 
-            return Mathf.Approximately(result.sqrMagnitude, 1f);
+            return Util.Approx(result.sqrMagnitude, 1f);
         }
+
+        public static Vector3 AlignedDir(Tile tile1, Tile tile2)
+        {
+            // This function is called too many times
+            // Either eliminate those cases and/or optimize these Approx'es
+            var p1 = tile1.Position;
+            var p2 = tile2.Position;
+
+            if (Util.Approx(p1.y, p2.y) 
+                && Util.Approx(p1.z, p2.z))
+            {
+                return Vector3.right;
+            }
+            else if (Util.Approx(p1.x, p2.x) 
+                && Util.Approx(p1.z, p2.z))
+            {
+                return Vector3.up;
+            }
+            else
+            {
+                return Vector3.forward;
+            }
+        }
+
+        public static bool IsInBetween(Tile tile, Tile bender1, Tile bender2)
+        {
+            // tile1 and tile2 are assumed to be aligned
+            var alignedDir = AlignedDir(bender1, bender2);
+
+            // Tell if tile's coord along alignedDir is in between of bender1's and bender2's
+            return Vector3.Dot(tile.Position, alignedDir)
+                .InBetween(Vector3.Dot(bender1.Position, alignedDir), Vector3.Dot(bender2.Position, alignedDir));
+        }
+        #endregion
 
         private const float BendMoveSpeed = 1.5f;
         private const float BendFadeSpeed = 1.5f;
@@ -78,36 +113,55 @@ namespace Prefabric
             get { return _history.Count > 0 && _history.Peek().IsBent; }
         }
 
+        [SerializeField] // To make it appear in the inspector
         private TileVisualState _state;
         public TileVisualState VisualState
         {
             get { return _state; }
             set
             {
+                if (IsBent) // Inactive tiles don't go into this
+                {
+                    return;
+                }
+
                 switch (value)
                 {
                     case TileVisualState.None:
                         break;
                     case TileVisualState.Normal:
-                        _material.color = _normalColor;
+                        _material.SetRgb(_normalColor);
+                        _state = value;
                         break;
                     case TileVisualState.Hovered:
-                        _material.color = _hoverColor;
+                        if (_state == TileVisualState.Selected)
+                        {
+                            return;
+                        }
+                        _material.SetRgb(_hoverColor);
+                        _state = value;
                         break;
                     case TileVisualState.Selected:
-                        _material.color = _selectColor;
+                        _material.SetRgb(_selectColor);
+                        _state = value;
+                        break;
+                    case TileVisualState.InBetweenHighlighted:
+                        if (_state == TileVisualState.Selected)
+                        {
+                            return;
+                        }
+                        _material.SetRgb(_selectColor);
+                        _state = value;
                         break;
                     default:
                         break;
                 }
-                _state = value;
             }
         }
 
         // For now, I think going for shared material optimization is not needed
         // We won't have thousands of cubes, like we do in Fabric
         private Material _material;
-        private BoxCollider _collider;
 
         private readonly Stack<TileState> _history = new Stack<TileState>();
         private Vector3 _initialPosition;
@@ -125,7 +179,6 @@ namespace Prefabric
             _normalColor = _material.color;
             VisualState = TileVisualState.Normal;
             _initialPosition = Position;
-            _collider = GetComponent<BoxCollider>();
 
             // Higher greytiles will look darker
             // This way, it's way easier to distinguish walls from the floor level
@@ -133,10 +186,12 @@ namespace Prefabric
             if (ResourceType == PfResourceType.GreyTile)
             {
                 var c = (1 - ((Position.y % 3) / 3)) * Color.white;
-                _material.color = new Color(c.r, c.b, c.b, 1f);
+                _normalColor = c;
+                _material.SetRgb(c);
             }
         }
 
+        // This is a replacement for Unity's Update() function
         public void ExternalUpdate()
         {
         }
@@ -213,15 +268,18 @@ namespace Prefabric
                 if (f < 0.001)
                 {
                     _material.SetAlpha(0f);
+                    gameObject.SetActive(false);
                     fadeoutDisposable.Dispose();
                 }
             });
 
-            _collider.enabled = false;
+            //_collider.enabled = false;
         }
 
         protected virtual void FadeIn()
         {
+            gameObject.SetActive(true);
+
             var f = 1f;
             IDisposable fadeoutDisposable = null;
             fadeoutDisposable = Observable.EveryUpdate().Subscribe(x =>
@@ -236,7 +294,6 @@ namespace Prefabric
                 }
             });
 
-            _collider.enabled = true;
 
         }
     }

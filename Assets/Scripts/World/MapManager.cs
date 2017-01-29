@@ -67,10 +67,31 @@ namespace Prefabric
             }
 
             // Unselect old hover
-            if (_hoverTile != null // Will be null for the first assignment
-                 && _hoverTile.VisualState != TileVisualState.Selected) // Don't touch selected tile visuals
+            if (_hoverTile != null) // Will be null for the first assignment
             {
                 _hoverTile.VisualState = TileVisualState.Normal;
+            }
+
+            // Reset inBtwn effect
+            foreach (var t in _tiles)
+            {
+                t.VisualState = TileVisualState.Normal;
+            }
+
+            
+
+            // If we are aiming at an axis-aligned tile, highlight the tiles in between them
+            if (_firstSelectedTile != null
+                && Tile.IsAxisAligned(_firstSelectedTile, tile))
+            {
+                // Set visual state of appropriate tiles to inbtwn
+                foreach (var t in _tiles)
+                {
+                    if (Tile.IsInBetween(t, _firstSelectedTile, tile))
+                    {
+                        t.VisualState = TileVisualState.InBetweenHighlighted;
+                    }
+                }
             }
 
             if (!tile.IsInteractable) // Don't touch uninteractable tiles
@@ -79,11 +100,7 @@ namespace Prefabric
             }
 
             _hoverTile = tile;
-
-            if (_hoverTile.VisualState != TileVisualState.Selected) // Don't touch selected tile visuals
-            {
-                _hoverTile.VisualState = TileVisualState.Hovered;
-            }
+            _hoverTile.VisualState = TileVisualState.Hovered;
         }
 
         private void OnTileSelected(Tile tile)
@@ -120,10 +137,15 @@ namespace Prefabric
 
             _bendGuide.gameObject.SetActive(false);
 
+            // Reset tile visuals before bending
+            foreach (var t in _tiles)
+            {
+                t.VisualState = TileVisualState.Normal;
+            }
+
             // Actual bending
             Bend(_firstSelectedTile, tile);
 
-            _firstSelectedTile.VisualState = TileVisualState.Normal;
             _firstSelectedTile = null;
         }
 
@@ -147,19 +169,7 @@ namespace Prefabric
             }
 
             // The direction on which these tiles are aligned
-            Vector3 alignedDir;
-            if (Mathf.Approximately(tile1.Position.y, tile2.Position.y) && Mathf.Approximately(tile1.Position.z, tile2.Position.z))
-            {
-                alignedDir = Vector3.right;
-            }
-            else if (Mathf.Approximately(tile1.Position.x, tile2.Position.x) && Mathf.Approximately(tile1.Position.z, tile2.Position.z))
-            {
-                alignedDir = Vector3.up;
-            }
-            else
-            {
-                alignedDir = Vector3.forward;
-            }
+            var alignedDir = Tile.AlignedDir(tile1, tile2);
 
             var proj1 = Vector3.Dot(tile1.Position, alignedDir);
             var proj2 = Vector3.Dot(tile2.Position, alignedDir);

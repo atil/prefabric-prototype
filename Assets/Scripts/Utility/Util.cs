@@ -60,7 +60,11 @@ namespace Prefabric
                             from assemblyType in domainAssembly.GetTypes()
                             where typeof(T).IsAssignableFrom(assemblyType) && assemblyType != typeof(T)
                             select assemblyType).ToArray();
+        }
 
+        public static void SetRgb(this Material mat, Color arg)
+        {
+            mat.color = new Color(arg.r, arg.g, arg.b, mat.color.a);
         }
 
         public static void SetAlpha(this Material m, float a)
@@ -85,6 +89,11 @@ namespace Prefabric
         public static void WaitForSeconds(float seconds, Action function)
         {
             Observable.Timer(TimeSpan.FromSeconds(seconds)).Subscribe(x => function());
+        }
+
+        public static bool Approx(float a, float b)
+        {
+            return Mathf.Abs(a - b) < 0.0001f;
         }
     }
 }
