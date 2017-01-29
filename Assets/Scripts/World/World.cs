@@ -61,7 +61,8 @@ namespace Prefabric
 
                 // Wait for UI flash
                 // ... but a little less in order not to see a frame of non flashy screen
-                Observable.Timer(TimeSpan.FromSeconds(Curve.Instance.LevelPassFade.length - 0.1)).Subscribe(x =>
+
+                Util.WaitForSeconds(Curve.Instance.LevelPassFade.length - 0.1f, () =>
                 {
                     if (args.IsEditMode) // Passing level in editor scene
                     {
@@ -116,8 +117,7 @@ namespace Prefabric
             {
                 Music.FadeOut();
 
-                Observable.Timer(TimeSpan.FromSeconds(Curve.Instance.LevelPassFade.length - 0.1))
-                    .Subscribe(x =>
+                Util.WaitForSeconds(Curve.Instance.LevelPassFade.length - 0.1f, () =>
                 {
                     PfScene.Load("MainMenuScene");
                 });

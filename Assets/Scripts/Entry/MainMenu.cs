@@ -29,9 +29,9 @@ namespace Prefabric
                 GameSceneArgs.Write("singleBend.json", false); // Load first level
                 Ui.Flash(WhiteScreen, Curve.Instance.LevelPassFade);
                 Music.Play(true);
-                Observable.Timer(TimeSpan.FromSeconds(Curve.Instance.LevelPassFade.length)).Subscribe(x =>
-                {
 
+                Util.WaitForSeconds(Curve.Instance.LevelPassFade.length, () =>
+                {
                     PfScene.Load("GameScene");
                 });
             };

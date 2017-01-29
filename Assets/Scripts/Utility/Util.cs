@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -79,6 +80,11 @@ namespace Prefabric
         public static T Random<T>(this IList<T> list)
         {
             return list[UnityEngine.Random.Range(0, list.Count)];
+        }
+
+        public static void WaitForSeconds(float seconds, Action function)
+        {
+            Observable.Timer(TimeSpan.FromSeconds(seconds)).Subscribe(x => function());
         }
     }
 }

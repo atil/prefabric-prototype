@@ -36,7 +36,7 @@ namespace Prefabric
         public static void Play(bool startNewRandom)
         {
             FadeOut();
-            Observable.Timer(TimeSpan.FromSeconds(LinearDownCurve.length)).Subscribe(x =>
+            Util.WaitForSeconds(LinearDownCurve.length, () =>
             {
                 FadeIn();
 
