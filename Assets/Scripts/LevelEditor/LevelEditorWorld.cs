@@ -130,10 +130,9 @@ namespace Prefabric.LevelEditor
 
         private void InstantiateTile(Vector3 position)
         {
-            var tileGo = Instantiate(PfResources.Load<GameObject>(_curResource));
+            var tileGo = Instantiate(PfResources.Load<GameObject>(_curResource), position, Quaternion.identity);
             var newTile = tileGo.GetComponent<Tile>();
             newTile.Init(Guid.NewGuid(), _curResource);
-            newTile.Position = position;
             _tiles.Add(newTile);
         }
     }

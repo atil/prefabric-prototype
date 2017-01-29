@@ -127,10 +127,14 @@ namespace Prefabric
             _initialPosition = Position;
             _collider = GetComponent<BoxCollider>();
 
-            // Higher tiles will look darker
+            // Higher greytiles will look darker
             // This way, it's way easier to distinguish walls from the floor level
-            var c = (1 - ((Position.y % 3) / 3)) * Color.white;
-            _material.color = new Color(c.r, c.b, c.b, 1f);
+            // Note that this requires Position to be selected before Init() call
+            if (ResourceType == PfResourceType.GreyTile)
+            {
+                var c = (1 - ((Position.y % 3) / 3)) * Color.white;
+                _material.color = new Color(c.r, c.b, c.b, 1f);
+            }
         }
 
         public void ExternalUpdate()
