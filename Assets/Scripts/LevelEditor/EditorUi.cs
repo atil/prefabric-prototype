@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using JetBrains.Annotations;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
@@ -15,6 +17,7 @@ namespace Prefabric.LevelEditor
         public Button MenuButton;
         public EditorMenu EditorMenu;
         public EditorTileSelector EditorTileSelector;
+        public Text CurrentLevelName;
 
         public void Init()
         {
@@ -46,13 +49,26 @@ namespace Prefabric.LevelEditor
             {
                 MenuButton.interactable = false;
                 EditorMenu.SetState(false);
+
+                SetLevelName(ev.Path);
             });
 
             MessageBus.OnEvent<EditorLoadLevelEvent>().Subscribe(ev =>
             {
                 MenuButton.interactable = false;
                 EditorMenu.SetState(false);
+
+                SetLevelName(ev.Path);
             });
+
+             SetLevelName(GameSceneArgs.Load().LevelName);
+
+        }
+
+        private void SetLevelName(string path)
+        {
+            var lvlName = path.Split('/').Last().Split('.').First();
+            CurrentLevelName.text = lvlName;
         }
     }
 }
