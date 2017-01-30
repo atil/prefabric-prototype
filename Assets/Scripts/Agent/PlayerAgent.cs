@@ -148,7 +148,13 @@ namespace Prefabric
                 Util.WaitForSeconds(0.7f, () =>  // TODO: That magic number is haram
                 {
                     _isFallingdown = false;
+
+                    var dropAmount = (Position - _lastStandingTile.Position).magnitude;
                     Position = _lastStandingTile.Position + Vector3.up;
+
+                    // When player is teleported back up, so should be camera
+                    // ... with a little bit of extra leverage to make it look better
+                    _cmdCamTargetPos += Vector3.up * (dropAmount + 10f);
                 });
             }
         }
