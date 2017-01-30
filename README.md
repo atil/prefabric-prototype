@@ -20,6 +20,8 @@ Credits:
 
 - Sfx by [Audiorhapsody](http://www.audiorhapsody.com/2016/10/07/sound-effects-pack-1/)
 
-- Music by Kevin McLeod (incompetech.com)
-
 - Additional UI by [Kenney](http://kenney.nl/assets/ui-pack-space-expansion)
+
+- [Skybox](https://github.com/keijiro/UnitySkyboxShaders) and [Kvant Wall](https://github.com/keijiro/KvantWall) by keijiro
+
+- Music by [Kevin McLeod](http://incompetech.com), tracks used *Floating Cities, Overheat, Soaring*
