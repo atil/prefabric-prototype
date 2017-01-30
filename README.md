@@ -24,4 +24,4 @@ Credits:
 
 - [Skybox](https://github.com/keijiro/UnitySkyboxShaders) and [Kvant Wall](https://github.com/keijiro/KvantWall) by keijiro
 
-- Music by [Kevin McLeod](http://incompetech.com), tracks used *Floating Cities, Overheat, Soaring*
+- Music by [Kevin McLeod](http://incompetech.com), tracks used: *Floating Cities, Overheat, Soaring*

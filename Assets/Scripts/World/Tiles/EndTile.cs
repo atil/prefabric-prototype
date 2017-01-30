@@ -19,19 +19,6 @@ namespace Prefabric
             {
                 return;
             }
-
-            var endZonePrefab = PfResources.Load<GameObject>(PfResourceType.EndZone);
-
-            for (int i = 0; i < 10; i++)
-            {
-                var endZoneGo = Instantiate(endZonePrefab, Position + Vector3.up * (i + 1), Quaternion.identity);
-                endZoneGo.transform.SetParent(Transform);
-                if (i != 0)
-                {
-                    Destroy(endZoneGo.GetComponent<Collider>());
-                }
-            }
-
         }
 
         protected override void FadeIn()

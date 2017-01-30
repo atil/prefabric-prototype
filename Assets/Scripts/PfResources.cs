@@ -14,7 +14,6 @@ namespace Prefabric
         BlackTile,
         StartTile,
         EndTile,
-        EndZone,
         EditorTileButton,
         EditorFileButton,
         Player,
@@ -49,7 +48,6 @@ namespace Prefabric
             ResourcePaths.Add(PfResourceType.BlackTile, "Prefabs/Tiles/BlackTile");
             ResourcePaths.Add(PfResourceType.StartTile, "Prefabs/Tiles/StartTile");
             ResourcePaths.Add(PfResourceType.EndTile, "Prefabs/Tiles/EndTile");
-            ResourcePaths.Add(PfResourceType.EndZone, "Prefabs/Tiles/EndZone");
             ResourcePaths.Add(PfResourceType.EditorTileButton, "LevelEditor/Prefabs/TileButton");
             ResourcePaths.Add(PfResourceType.EditorFileButton, "LevelEditor/Prefabs/FileButton");
             ResourcePaths.Add(PfResourceType.Player, "Prefabs/Player");
