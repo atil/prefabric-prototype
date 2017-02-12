@@ -15,8 +15,12 @@ namespace Prefabric
             get { return _instance ?? (_instance = FindObjectOfType<Curve>()); }
         }
 
+        [Header("Tile Effects")]
         public AnimationCurve TileTween;
         public AnimationCurve TileTweenFade;
+        public AnimationCurve TileTweenFadeIn;
+
+        [Header("UI Effects")]
         public AnimationCurve PlayerFallFade;
         public AnimationCurve LevelPassFade;
         public AnimationCurve LevelBeginFade;

@@ -262,7 +262,9 @@ namespace Prefabric
             IDisposable fadeoutDisposable = null;
             fadeoutDisposable = Observable.EveryUpdate().Subscribe(x =>
             {
+                Transform.localScale = Vector3.one * f;
                 _material.SetAlpha(Curve.Instance.TileTweenFade.Evaluate(f));
+
                 f -= PfTime.DeltaTime * BendFadeSpeed;
 
                 if (f < 0.001)
@@ -272,19 +274,20 @@ namespace Prefabric
                     fadeoutDisposable.Dispose();
                 }
             });
-
-            //_collider.enabled = false;
         }
 
         protected virtual void FadeIn()
         {
             gameObject.SetActive(true);
 
-            var f = 1f;
+            var f = 0f;
             IDisposable fadeoutDisposable = null;
             fadeoutDisposable = Observable.EveryUpdate().Subscribe(x =>
             {
-                _material.SetAlpha(Curve.Instance.TileTweenFade.Evaluate(f));
+                var t = Curve.Instance.TileTweenFadeIn.Evaluate(f);
+                Transform.localScale = Vector3.one * t;
+                _material.SetAlpha(t);
+
                 f += PfTime.DeltaTime * BendFadeSpeed;
 
                 if (f > 0.999)
@@ -293,8 +296,6 @@ namespace Prefabric
                     fadeoutDisposable.Dispose();
                 }
             });
-
-
         }
     }
 }
