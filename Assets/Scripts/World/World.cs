@@ -3,6 +3,7 @@ using UnityEngine;
 using UniRx;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using SimpleJSON;
 using UnityEngine.SceneManagement;
 
@@ -26,11 +27,11 @@ namespace Prefabric
         private Ui _ui;
 
         private List<AgentBase> _agents;
-        private KeyboardMouseController _keyboardMouseController;
+        private readonly List<ControllerBase> _controllers = new List<ControllerBase>();
+
         private MapManager _mapManager;
         private PlayerAgent _player;
 
-        private readonly List<string> _levelPaths = new List<string>();
 
         private bool _isLevelTransition; // Let's not go uglier than that okay?
 
@@ -40,14 +41,11 @@ namespace Prefabric
 
             var args = GameSceneArgs.Load();
 
-            var json = JSON.Parse(PfResources.LoadStringAt("levelPaths.json"));
-            foreach (JSONNode pathString in json["paths"].AsArray)
-            {
-                _levelPaths.Add(pathString.Value);
-            }
-
-            _keyboardMouseController = new KeyboardMouseController();
-
+#if UNITY_ANDROID
+            _controllers.Add(new TouchController());
+#else
+            _controllers.Add(new KeyboardMouseController());
+#endif
             var playerGo = Instantiate(PfResources.Load<GameObject>(PfResourceType.Player));
 
             _player = new PlayerAgent(playerGo.transform, _camTransform);
@@ -79,7 +77,7 @@ namespace Prefabric
                     _isLevelTransition = true;
 
                     // Advance level
-                    var curLevelIndex = _levelPaths.IndexOf(args.LevelName);
+                    var curLevelIndex = Levels.Paths.IndexOf(args.LevelName);
 
                     if (curLevelIndex == -1)
                     {
@@ -88,14 +86,14 @@ namespace Prefabric
                     }
 
                     curLevelIndex++;
-                    if (curLevelIndex >= _levelPaths.Count)
+                    if (curLevelIndex >= Levels.Paths.Count)
                     {
                         // Endgame
                         PfScene.Load("MainMenuScene");
                     }
                     else
                     {
-                        GameSceneArgs.Write(_levelPaths[curLevelIndex], false);
+                        GameSceneArgs.Write(Levels.Paths[curLevelIndex], false);
                         PfScene.Load("GameScene");
                     }
                 });
@@ -132,7 +130,10 @@ namespace Prefabric
         void Update()
         {
             // Emit commands
-            _keyboardMouseController.Update();
+            foreach (var controller in _controllers)
+            {
+                controller.Update();
+            }
 
             // Let agents do whatever they want with those commands
             foreach (var agent in _agents)

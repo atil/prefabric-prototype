@@ -95,5 +95,15 @@ namespace Prefabric
         {
             return Mathf.Abs(a - b) < 0.0001f;
         }
+
+        public static string GetDataPath()
+        {
+#if UNITY_ANDROID
+            return Application.persistentDataPath;
+#else
+            return Application.dataPath;
+#endif
+
+        }
     }
 }

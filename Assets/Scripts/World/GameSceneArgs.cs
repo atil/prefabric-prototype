@@ -34,7 +34,15 @@ namespace Prefabric
         /// <returns></returns>
         public static GameSceneArgs Load()
         {
-            var gameSceneArgsJson = JSON.Parse(PfResources.LoadStringAt("gameSceneArgs.json"));
+            var jsonString = PfResources.LoadStringAt("gameSceneArgs.json");
+
+            // In the first run on a machine, there won't be this json file
+            if (jsonString == string.Empty)
+            {
+                jsonString = GenerateArgsFile();
+            }
+
+            var gameSceneArgsJson = JSON.Parse(jsonString);
             return new GameSceneArgs()
             {
                 LevelName = gameSceneArgsJson["levelName"].Value,
@@ -49,10 +57,28 @@ namespace Prefabric
         /// <param name="isEditMode"></param>
         public static void Write(string lvlName, bool isEditMode)
         {
-            var gameSceneArgsJson = JSON.Parse(PfResources.LoadStringAt("gameSceneArgs.json"));
+            var jsonString = PfResources.LoadStringAt("gameSceneArgs.json");
+            
+            // In the first run on a machine, there won't be this json file
+            if (jsonString == string.Empty)
+            {
+                jsonString = GenerateArgsFile();
+            }
+
+            var gameSceneArgsJson = JSON.Parse(jsonString);
             gameSceneArgsJson["levelName"] = lvlName;
             gameSceneArgsJson["isEditMode"].AsBool = isEditMode;
-            System.IO.File.WriteAllText(Application.dataPath + "/gameSceneArgs.json", gameSceneArgsJson.ToString());
+
+            System.IO.File.WriteAllText(Util.GetDataPath() + "/gameSceneArgs.json", gameSceneArgsJson.ToString());
+        }
+
+        private static string GenerateArgsFile()
+        {
+            var newJson = new JSONClass();
+            newJson["levelName"] = Levels.Paths[0];
+            newJson["isEditMode"].AsBool = false;
+            System.IO.File.WriteAllText(Util.GetDataPath() + "/gameSceneArgs.json", newJson.ToString());
+            return newJson.ToString();
         }
     }
 }

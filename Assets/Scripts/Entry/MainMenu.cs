@@ -26,7 +26,7 @@ namespace Prefabric
 
             PlayButton.Clicked += () =>
             {
-                GameSceneArgs.Write("singleBend.json", false); // Load first level
+                GameSceneArgs.Write(Levels.Paths[0], false); // Load first level
                 Ui.Flash(WhiteScreen, Curve.Instance.LevelPassFade);
                 Music.Play(true);
 

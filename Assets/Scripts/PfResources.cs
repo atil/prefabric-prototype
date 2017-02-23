@@ -71,7 +71,7 @@ namespace Prefabric
         /// <returns>File contents as string</returns>
         public static string LoadStringAt(string path)
         {
-            path = Application.dataPath + "/" + path;
+            path = Util.GetDataPath() + "/" + path;
             if (!System.IO.File.Exists(path))
             {
                 Debug.LogError("File doesn't exist : " + path);

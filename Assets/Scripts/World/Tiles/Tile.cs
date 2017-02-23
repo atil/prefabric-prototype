@@ -260,6 +260,11 @@ namespace Prefabric
         {
             var f = 1f;
             IDisposable fadeoutDisposable = null;
+
+            // Should be careful if anything in this lambda's body is dependent 
+            // to any other thing updated in ExternalUpdate()
+            // Because we don't know where UniRx plugs in EveryUpdate() call in the frame
+            // (actually we can find out, but I'm too lazy)
             fadeoutDisposable = Observable.EveryUpdate().Subscribe(x =>
             {
                 Transform.localScale = Vector3.one * f;
