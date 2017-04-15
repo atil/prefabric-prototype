@@ -1,3 +1,5 @@
+[This is a snapshot from the prototype stage. This repo's development and Trello updates are discontinued. Prefabric is currently under development as a commercial product]
+
 #PREFABRIC
 
 Prefabric is a 2.5D game about thinking space as a mutable entity.
